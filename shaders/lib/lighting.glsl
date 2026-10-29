@@ -63,7 +63,7 @@ vec3 shadeSurface(Surface s, vec3 playerPos, vec3 lightDir, vec3 lightColor, vec
     if (lightLeak > 0.0 && (nl > 0.0 || s.sss > 0.0)) {
         vec3 vis = vec3(1.0);
 #ifndef NO_SHADOWMAP
-        if (useShadowMap) vis = getShadow(playerPos, n, nlRaw, noise, s.sss);
+        if (useShadowMap) vis = getShadow(playerPos, n, nlRaw, noise, s.sss) * waterLightTransmit(playerPos, lightDir, 0.0);
         else
 #endif
         vis = vec3(smoothstep(0.6, 0.95, skyLm));

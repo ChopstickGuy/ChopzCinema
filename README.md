@@ -1,4 +1,4 @@
-# ChopzCinema Shaders (v0.2, Entwicklungsversion)
+# ChopzCinema Shaders (v0.3, Entwicklungsversion)
 
 Ein cineastischer Shader für **Minecraft 1.20.1** mit **Oculus/Iris** und Unterstützung für **Distant Horizons**.
 Ziel: Film-Look (Teal & Orange, weiches Licht, starke Licht-/Schattenkontraste), volumetrische Wolken, Nebel und Lichtstrahlen. Die Reflexionen sollen schön sein, ohne zu übertreiben.
@@ -20,7 +20,9 @@ Ziel: Film-Look (Teal & Orange, weiches Licht, starke Licht-/Schattenkontraste),
 | Wolken | volumetrische Cumulus-Wolken (halbe Auflösung), Silberränder, Regen macht sie dichter |
 | Nebel | Höhennebel und Dunst, Morgen-/Abendnebel, Lichtstrahlen (God Rays) mit echten Schatten, Unterwasser-Lichtstrahlen |
 | Licht | weiche Schatten (Vogel-PCF), farbige Schatten durch Glas, durchscheinende Blätter, warmes Fackellicht (Kelvin einstellbar) |
-| Wasser | prozedurale Wellen, Lichtbrechung, Absorption, Screen-Space-Reflexionen, Sonnenglitzern |
+| Wasser | prozedurale Wellen, Lichtbrechung, Absorption, Screen-Space-Reflexionen, Sonnenglitzern, Kaustiken (Lichtnetz am Grund), Licht wird auf dem Weg nach unten gefiltert |
+| Unterwasser | Lichtstrahlen durch die Wellen (aus den Kaustiken), Schatten von Booten/Terrain in den Strahlen, Lichtfenster an der Oberfläche |
+| Hitze | aufsteigendes Hitzeflimmern über Lava, Feuer, Magma, Lagerfeuern und Öfen; im Nether zusätzlich Flimmern in der Ferne und orange glühender Nebel über dem Lavameer |
 | Reflexionen | Metall- und polierte Blöcke, Pfützen bei Regen |
 | Kamera | TAA, Auto-Belichtung, Bloom mit Halation, AgX-/ACES-Filmkurve, Color Grading, anamorphotischer Lens Flare, Vignette, Filmkorn, optionale Kinobalken |
 | Distant Horizons | LODs bekommen dieselbe Beleuchtung, denselben Nebel, Wolken und TAA, mit einem nahtlosen Übergang zu den normalen Chunks |
@@ -49,5 +51,5 @@ tools_gen_wrappers.py  erzeugt die Wrapper neu (nach Änderungen an der Programm
 10. `final`: Bloom, Lens Flare, Filmkurve, Grading, Vignette, Korn
 
 ## Status
-Version 0.2: Alle Programme kompilieren in allen Dimensionen fehlerfrei mit einem echten OpenGL-Compiler.
+Version 0.3: Alle Programme kompilieren in allen Dimensionen fehlerfrei mit einem echten OpenGL-Compiler.
 **Im Spiel ist sie noch ungetestet.** Bitte bei Problemen Screenshots und `.minecraft/logs/latest.log` schicken.

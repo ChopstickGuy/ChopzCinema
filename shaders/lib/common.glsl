@@ -58,6 +58,7 @@ const int MAT_HAND = 5;
 const int MAT_ENTITY = 6;
 const int MAT_SKY_OBJECT = 7; // moon, stars
 const int MAT_LAVA = 8;
+const int MAT_HOT = 9;      // fire, magma, campfires: emissive + heat haze
 
 // Translucent types (integer part of colortex4.z * 8)
 const int TR_NONE = 0;

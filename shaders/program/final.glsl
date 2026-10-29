@@ -45,6 +45,9 @@ void main() {
 const bool colortex3MipmapEnabled = true;
 #include "/lib/buffers.glsl"
 
+#include "/lib/depth.glsl"
+
+uniform sampler2D colortex0;
 uniform sampler2D colortex3;
 uniform sampler2D colortex9;
 
@@ -102,8 +105,53 @@ vec3 lensFlare(vec2 uv) {
 #endif
 }
 
+// ---------------------------------------------------------------- heat haze
+// Air above lava / fire shimmers. We look downwards in screen space for hot surfaces
+// and estimate how many blocks above them the current pixel is.
+vec2 heatHaze(vec2 uv) {
+#ifdef HEAT_HAZE
+    DepthSample here = sampleDepth(uv, true);
+    if (!here.isDH && here.depth < 0.56) return uv; // never distort the hand
+    float heat = 0.0;
+    float projScale = gbufferProjection[1][1];
+    for (int i = 0; i <= 10; i++) {
+        float off = i == 0 ? 0.0 : 0.003 * pow(1.5, float(i));
+        vec2 suv = vec2(uv.x, uv.y - off);
+        if (suv.y < 0.0) break;
+        int mat = int(texelFetch(colortex0, ivec2(suv * screenSize()), 0).a * 255.0 + 0.5);
+        if (mat != MAT_LAVA && mat != MAT_HOT) continue;
+        DepthSample ds = sampleDepth(suv, true);
+        if (ds.isSky) continue;
+        float d = -ds.viewPos.z;
+        // pixels -> blocks at the distance of the hot surface
+        float blocksAbove = off * 2.0 * d / projScale;
+        float reach = mat == MAT_LAVA ? 3.0 : 1.5;
+        float h = exp(-blocksAbove / reach) * (mat == MAT_LAVA ? 1.0 : 0.6);
+        // only things behind (or at) the hot air get distorted
+        if (!here.isSky && -here.viewPos.z < d - 2.0) h = 0.0;
+        // the effect weakens with distance so far lava doesn't turn into noise
+        h *= 1.0 / (1.0 + d * 0.02);
+        heat = max(heat, h);
+    }
+#if defined DIM_NETHER && defined NETHER_HEAT_HAZE
+    // the whole Nether shimmers a bit in the distance
+    float dist = here.isSky ? 200.0 : length(here.viewPos);
+    heat = max(heat, 0.3 * smoothstep(12.0, 80.0, dist));
+#endif
+    if (heat <= 0.001) return uv;
+    float t = frameTimeCounter;
+    vec2 p = uv * vec2(viewWidth / viewHeight, 1.0);
+    // noise scrolls upwards like rising hot air
+    vec2 n = textureLod(noisetex, p * 1.6 - vec2(0.0, t * 0.12), 0.0).xy - 0.5;
+    n += (textureLod(noisetex, p * 3.7 - vec2(t * 0.02, t * 0.25), 0.0).yx - 0.5) * 0.6;
+    return uv + n * vec2(0.7, 1.0) * heat * 0.006 * HEAT_HAZE_STRENGTH;
+#else
+    return uv;
+#endif
+}
+
 void main() {
-    vec2 uv = texcoord;
+    vec2 uv = heatHaze(texcoord);
 
     // letterbox
 #if LETTERBOX > 0
@@ -115,7 +163,7 @@ void main() {
     float aspectNow = viewWidth / viewHeight;
     if (aspectNow < targetAspect) {
         float bar = (1.0 - aspectNow / targetAspect) * 0.5;
-        if (uv.y < bar || uv.y > 1.0 - bar) { fragColor = vec4(0.0, 0.0, 0.0, 1.0); return; }
+        if (texcoord.y < bar || texcoord.y > 1.0 - bar) { fragColor = vec4(0.0, 0.0, 0.0, 1.0); return; }
     }
 #endif
 

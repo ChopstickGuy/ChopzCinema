@@ -53,12 +53,20 @@ const int noiseTextureResolution = 256;
 #define MORNING_MIST 1.0 // [0.0 0.5 1.0 1.5 2.0]
 #define VL_STRENGTH 1.0 // [0.25 0.5 0.75 1.0 1.5 2.0]
 #define CAVE_FOG
+#define NETHER_LAVA_GLOW 1.0 // [0.0 0.5 1.0 1.5 2.0]
+
+// ---------- Heat ----------
+#define HEAT_HAZE
+#define HEAT_HAZE_STRENGTH 1.0 // [0.25 0.5 0.75 1.0 1.5 2.0 3.0]
+#define NETHER_HEAT_HAZE
 
 // ---------- Water ----------
 #define WATER_WAVES
 #define WATER_WAVE_HEIGHT 1.0 // [0.25 0.5 0.75 1.0 1.5 2.0]
 #define WATER_CLARITY 1.0 // [0.5 0.75 1.0 1.5 2.0]
 #define WATER_TEXTURE 0.0 // [0.0 0.25 0.5 0.75 1.0]
+#define WATER_CAUSTICS
+#define UNDERWATER_RAYS 1.0 // [0.0 0.25 0.5 0.75 1.0 1.5 2.0 3.0]
 
 // ---------- Reflections ----------
 #define SSR

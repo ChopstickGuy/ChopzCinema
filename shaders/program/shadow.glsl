@@ -42,14 +42,21 @@ flat in int blockId;
 
 uniform sampler2D gtexture;
 
-/* RENDERTARGETS: 0 */
+/* RENDERTARGETS: 0,1 */
 layout(location = 0) out vec4 outColor;
+layout(location = 1) out vec4 outWater; // x: water flag, z: depth of the water surface in the shadow map
 
 void main() {
     vec4 albedo = texture(gtexture, texcoord) * tint;
     if (albedo.a < 0.1) discard;
-    // water casts no shadow of its own (caustics-free but keeps underwater bright)
-    if (blockId == ID_WATER) discard;
+    if (blockId == ID_WATER) {
+        // water casts no shadow itself (white, no alpha) but marks where the surface is,
+        // so lighting below can apply caustics and absorption along the light path
+        outColor = vec4(1.0, 1.0, 1.0, 0.0);
+        outWater = vec4(1.0, 0.0, gl_FragCoord.z, 1.0);
+        return;
+    }
     outColor = vec4(pow(albedo.rgb, vec3(2.2)), albedo.a);
+    outWater = vec4(0.0);
 }
 #endif

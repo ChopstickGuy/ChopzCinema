@@ -1,3 +1,5 @@
+#ifndef WATER_GLSL
+#define WATER_GLSL
 // Procedural water surface: sum of directional waves with analytic derivatives.
 
 vec2 waterWaveGradient(vec2 p) {
@@ -42,3 +44,33 @@ vec3 waterAbsorption() {
 vec3 waterScatterColor() {
     return vec3(0.012, 0.06, 0.07);
 }
+
+// Distance to the nearest cell border of an animated Voronoi pattern (0 on the border).
+float causticCells(vec2 p, float t) {
+    vec2 ip = floor(p), fp = fract(p);
+    float d1 = 8.0, d2 = 8.0;
+    for (int y = -1; y <= 1; y++) for (int x = -1; x <= 1; x++) {
+        vec2 g = vec2(x, y);
+        vec2 o = hash22(ip + g);
+        o = 0.5 + 0.4 * sin(t + TAU * o);
+        vec2 r = g + o - fp;
+        float d = dot(r, r);
+        if (d < d1) { d2 = d1; d1 = d; } else if (d < d2) { d2 = d; }
+    }
+    return sqrt(d2) - sqrt(d1);
+}
+
+// Caustics: bright net of focused light on things below the water surface (mean ~1).
+// xz = point where the light entered the water, depth in blocks.
+float waterCaustics(vec2 xz, float depth, const bool cheap) {
+    float t = frameTimeCounter * 0.9;
+    // gentle warp so the net wobbles with the waves
+    vec2 p = xz * 0.45 + vec2(sin(xz.y * 0.4 + t * 0.7), cos(xz.x * 0.35 - t * 0.6)) * 0.35;
+    // shallow water: sharp thin lines, deeper: wider and softer
+    float width = mix(0.05, 0.22, saturate(depth / 12.0));
+    float c = exp(-causticCells(p, t) / width);
+    if (!cheap) c = (c + exp(-causticCells(p * 1.37 + 5.3, t * 1.13 + 2.0) / width)) * 0.5;
+    float caustic = 0.35 + c * 2.6;
+    return mix(caustic, 1.0, smoothstep(8.0, 28.0, depth));
+}
+#endif

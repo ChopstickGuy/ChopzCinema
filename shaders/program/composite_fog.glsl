@@ -50,7 +50,12 @@ void main() {
 #if defined DIM_NETHER
     float T = exp(-dist * 0.006 * FOG_DENSITY);
     if (ds.isSky) T = 0.0;
-    color = color * T + fogColor * 0.4 * (1.0 - T);
+    // the lava ocean (y ~ 31) lights the haze from below: orange glow low down, darker fog higher up
+    float yMid = cameraPosition.y + dir.y * min(dist, 256.0) * 0.5;
+    float lavaGlow = exp(-max(yMid - 31.0, 0.0) / 20.0);
+    lavaGlow *= 0.85 + 0.15 * sin(frameTimeCounter * 0.7 + yMid * 0.1);
+    vec3 netherFog = fogColor * 0.4 + vec3(1.0, 0.32, 0.06) * lavaGlow * 0.35 * NETHER_LAVA_GLOW;
+    color = color * T + netherFog * (1.0 - T);
 #elif defined DIM_END
     float T = exp(-dist * 0.0025 * FOG_DENSITY);
     if (ds.isSky) T = 1.0;

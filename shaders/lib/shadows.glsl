@@ -13,7 +13,9 @@ float shadowDistortFactor(vec2 p) {
 }
 
 #ifndef SHADOW_PASS
+#include "/lib/water.glsl"
 uniform sampler2DShadow shadowtex0;
+uniform sampler2D shadowcolor1;
 uniform sampler2DShadow shadowtex1;
 uniform sampler2D shadowcolor0;
 
@@ -69,6 +71,27 @@ vec3 getShadow(vec3 playerPos, vec3 worldNormal, float nl, float noise, float ss
     }
     sum /= float(SHADOW_SAMPLES);
     return mix(sum, vec3(1.0), fade);
+}
+
+// Light reaching a point below a water surface: caustics + absorption along the light path.
+// Returns 1 above water / outside the shadow map.
+vec3 waterLightTransmit(vec3 playerPos, vec3 lightDir, float softness) {
+#ifdef WATER_CAUSTICS
+    vec3 d = distortShadow(playerToShadowClip(playerPos)) * 0.5 + 0.5;
+    if (any(greaterThan(abs(d.xy - 0.5), vec2(0.499)))) return vec3(1.0);
+    vec4 w = texelFetch(shadowcolor1, ivec2(d.xy * float(shadowMapResolution)), 0);
+    if (w.x < 0.5) return vec3(1.0);
+    // shadow depth -> blocks along the light direction
+    float depthBlocks = (d.z - w.z) / (0.125 * abs(shadowProjection[2][2]));
+    if (depthBlocks <= 0.05) return vec3(1.0);
+    vec3 trans = exp(-waterAbsorption() * depthBlocks);
+    vec3 surface = playerPos + cameraPosition + lightDir * depthBlocks;
+    float c = softness > 0.0 ? waterCaustics(surface.xz, depthBlocks, true) : waterCaustics(surface.xz, depthBlocks, false);
+    c = mix(c, 1.0, softness);
+    return trans * c;
+#else
+    return vec3(1.0);
+#endif
 }
 
 // Single tap hard shadow for volumetrics

@@ -29,19 +29,24 @@ void main() {
     vec3 sum = vec3(0.0);
 
     if (isEyeInWater == 1) {
-        // underwater light shafts
-        float dt = len / float(VL_SAMPLES);
+        // underwater light shafts: sunlight focused by the waves (caustics) and
+        // blocked by terrain, scattered by the water towards the camera
+        const int uwSteps = VL_SAMPLES * 2;
+        float uwLen = min(dist, 40.0);
+        float dt = uwLen / float(uwSteps);
         vec3 absorb = waterAbsorption();
-        for (int i = 0; i < VL_SAMPLES; i++) {
+        for (int i = 0; i < uwSteps; i++) {
             float t = dt * (float(i) + dither);
             vec3 p = dir * t;
             float sh = getShadowFast(p);
-            // light travels down through the water as well
-            float depthBelow = max(0.0, 63.0 - (p.y + cameraPosition.y));
-            vec3 tr = exp(-absorb * (t + depthBelow * 0.5));
-            sum += sh * tr * dt;
+            if (sh <= 0.0) continue;
+            // light path: absorption from the surface down to p + caustic pattern (softened -> broad shafts)
+            vec3 light = waterLightTransmit(p, lightDir, 0.35);
+            // view path: absorption from p back to the camera
+            sum += sh * light * exp(-absorb * t) * dt;
         }
-        sum *= lightColor * hgPhase(mu, 0.5) * waterScatterColor() * 6.0;
+        float phase = mix(hgPhase(mu, 0.6), 1.0 / (4.0 * PI), 0.3);
+        sum *= lightColor * phase * waterScatterColor() * 3.0 * UNDERWATER_RAYS;
     } else {
         FogParams fp = getFogParams(sunDir);
         // squared distribution: more samples close to the camera

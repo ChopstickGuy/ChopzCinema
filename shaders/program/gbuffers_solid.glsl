@@ -104,6 +104,12 @@ void main() {
         emission = smoothstep(0.55, 0.9, l) * smoothstep(0.1, 0.4, albedo.r - albedo.b * 0.5 + 0.3);
     } else if (blockId == ID_LAVA) {
         mat = MAT_LAVA; emission = 1.0;
+    } else if (blockId == ID_HOT) {
+        mat = MAT_HOT; emission = 0.6 + 0.4 * luminance(albedo.rgb);
+    } else if (blockId == ID_HOT_PART) {
+        mat = MAT_HOT;
+        float l = maxOf(albedo.rgb);
+        emission = smoothstep(0.55, 0.9, l) * smoothstep(0.1, 0.4, albedo.r - albedo.b * 0.5 + 0.3);
     }
 #ifdef BLOCK_REFLECTIONS
     else if (blockId == ID_METAL) {
