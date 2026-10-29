@@ -1,0 +1,95 @@
+// Tonemapping and colour grading
+
+// ---------------------------------------------------------------- tonemapping
+vec3 acesFitted(vec3 v) {
+    const mat3 ACESInput = mat3(0.59719, 0.07600, 0.02840, 0.35458, 0.90834, 0.13383, 0.04823, 0.01566, 0.83777);
+    const mat3 ACESOutput = mat3(1.60475, -0.10208, -0.00327, -0.53108, 1.10813, -0.07276, -0.07367, -0.00605, 1.07602);
+    v = ACESInput * v;
+    vec3 a = v * (v + 0.0245786) - 0.000090537;
+    vec3 b = v * (0.983729 * v + 0.4329510) + 0.238081;
+    return clamp(ACESOutput * (a / b), 0.0, 1.0);
+}
+
+vec3 agxContrast(vec3 x) {
+    vec3 x2 = x * x;
+    vec3 x4 = x2 * x2;
+    return 15.5 * x4 * x2 - 40.14 * x4 * x + 31.96 * x4 - 6.868 * x2 * x + 0.4298 * x2 + 0.1191 * x - 0.00232;
+}
+vec3 agx(vec3 v) {
+    const mat3 agxIn = mat3(0.842479062253094, 0.0423282422610123, 0.0423756549057051,
+                            0.0784335999999992, 0.878468636469772, 0.0784336,
+                            0.0792237451477643, 0.0791661274605434, 0.879142973793104);
+    const mat3 agxOut = mat3(1.19687900512017, -0.0528968517574562, -0.0529716355144438,
+                             -0.0980208811401368, 1.15190312990417, -0.0980434501171241,
+                             -0.0990297440797205, -0.0989611768448433, 1.15107367264116);
+    const float minEv = -12.47393, maxEv = 4.026069;
+    v = agxIn * max(v, 1e-10);
+    v = clamp(log2(v), minEv, maxEv);
+    v = (v - minEv) / (maxEv - minEv);
+    v = agxContrast(v);
+    // "punchy" look: a bit more contrast and saturation
+    v = pow(max(v, 0.0), vec3(1.2));
+    float l = dot(v, vec3(0.2126, 0.7152, 0.0722));
+    v = l + 1.25 * (v - l);
+    v = agxOut * v;
+    return clamp(pow(max(v, 0.0), vec3(2.2)), 0.0, 1.0);
+}
+
+vec3 tonemapUchimura(vec3 x) {
+    const float P = 1.0, a = 1.0, m = 0.22, l = 0.4, c = 1.33, b = 0.0;
+    float l0 = ((P - m) * l) / a;
+    float S0 = m + l0, S1 = m + a * l0, C2 = (a * P) / (P - S1), CP = -C2 / P;
+    vec3 w0 = 1.0 - smoothstep(0.0, m, x);
+    vec3 w2 = step(m + l0, x);
+    vec3 w1 = 1.0 - w0 - w2;
+    vec3 T = m * pow(x / m, vec3(c)) + b;
+    vec3 S = P - (P - S1) * exp(CP * (x - S0));
+    vec3 L = m + a * (x - m);
+    return T * w0 + L * w1 + S * w2;
+}
+
+vec3 tonemap(vec3 c) {
+#if TONEMAP == 0
+    return acesFitted(c);
+#elif TONEMAP == 1
+    return agx(c);
+#else
+    return tonemapUchimura(c);
+#endif
+}
+
+// ---------------------------------------------------------------- grading (display-referred, linear)
+vec3 colorGrade(vec3 c) {
+    float l = luminance(c);
+    vec3 graded = c;
+#if COLOR_GRADE == 1
+    // "Blockbuster": teal shadows, warm skin-tone highlights
+    vec3 shadowTint = vec3(0.86, 1.0, 1.12);
+    vec3 highTint = vec3(1.10, 1.0, 0.86);
+    float hw = smoothstep(0.05, 0.6, l);
+    graded *= mix(shadowTint, highTint, hw);
+#elif COLOR_GRADE == 2
+    // "Moody": cooler, slightly desaturated, deep blacks
+    graded = mix(vec3(l), graded, 0.8) * vec3(0.93, 1.0, 1.08);
+    graded = pow(graded, vec3(1.08));
+#elif COLOR_GRADE == 3
+    // "Golden hour": warm overall, soft highlights
+    graded *= vec3(1.08, 1.0, 0.85);
+    graded = mix(graded, vec3(l) * vec3(1.1, 0.95, 0.75), 0.08);
+#endif
+    graded = mix(c, graded, GRADE_STRENGTH);
+
+    // contrast around middle grey in log space
+    vec3 lg = log2(max(graded, 1e-6));
+    lg = (lg - log2(0.18)) * CONTRAST + log2(0.18);
+    graded = exp2(lg);
+    // saturation
+    float l2 = luminance(graded);
+    graded = mix(vec3(l2), graded, SATURATION);
+    return clamp(graded, 0.0, 1.0);
+}
+
+vec3 linearToSrgb(vec3 c) {
+    return mix(c * 12.92, 1.055 * pow(c, vec3(1.0 / 2.4)) - 0.055, step(0.0031308, c));
+}
+
