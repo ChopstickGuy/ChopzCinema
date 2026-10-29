@@ -68,6 +68,7 @@ flat in vec3 skyAmbient;
 flat in vec3 lightDir;
 
 uniform sampler2D gtexture;
+uniform int biome_precipitation;
 
 #if defined WATER_PASS || defined DH_WATER
 /* RENDERTARGETS: 6,4 */
@@ -108,7 +109,12 @@ void main() {
     if (type == TR_WATER) {
         vec3 wp = playerPos + cameraPosition;
         // waves only on (roughly) horizontal surfaces
-        if (n.y > 0.5) n = waterNormal(wp, length(playerPos));
+        if (n.y > 0.5) {
+            n = waterNormal(wp, length(playerPos));
+            // raindrops hitting the surface
+            vec2 rg = rainRipples(wp.xz) * smoothstep(0.85, 0.95, lmcoord.y) * smoothstep(40.0, 6.0, length(playerPos));
+            n = normalize(n + vec3(-rg.x, 0.0, -rg.y));
+        }
         else if (n.y < -0.5) n = -waterNormal(wp, length(playerPos));
         smoothness = 0.97;
         // water body colour is handled in composite (absorption + scattering),
@@ -149,9 +155,20 @@ void main() {
     // particles, rain/snow, hand, vanilla clouds
     if (albedo.a < 0.1) discard;
 #ifdef WEATHER
-    albedo.a *= 0.35;
-    Surface s = Surface(albedo.rgb, vec3(0.0, 1.0, 0.0), vec2(lmcoord.x, max(lmcoord.y, 0.6)), 0.0, 0.0, 0.0, 0.0, 1.0);
-#elif defined HAND
+    // cinematic rain: thin, mostly transparent streaks that catch the light.
+    // Backlit by the sun/moon they glow, near torches they turn warm.
+    bool snow = biome_precipitation == 2;
+    vec3 v = normalize(playerPos);
+    float back = pow(saturate(dot(v, lightDir)), 6.0);
+    vec3 streakLight = skyAmbient * 1.6 + lightColor * (0.12 + back * 2.5) * smoothstep(0.5, 0.9, lmcoord.y)
+                     + blockLightAmount(lmcoord.x) * 1.5 + vec3(0.75, 0.8, 1.0) * lightningFlash() * 2.0;
+    float a = albedo.a * (snow ? 0.6 : 0.2 * RAIN_STREAK_OPACITY);
+    // keep streaks very faint right in front of the camera so they don't cover the view
+    a *= smoothstep(0.5, 3.0, length(playerPos));
+    vec3 tintCol = snow ? vec3(1.0) : vec3(0.85, 0.9, 1.0);
+    outColor = vec4(tintCol * streakLight * (snow ? 0.8 : 1.0), a);
+#else
+#ifdef HAND
     Surface s = Surface(albedo.rgb, n, lmcoord, 0.0, 0.0, 0.0, 0.0, 1.0);
 #else
     // particles face the camera, light them as if lit from all sides
@@ -163,6 +180,7 @@ void main() {
     vec3 lit = shadeSurface(s, playerPos, lightDir, lightColor, skyAmbient, noise, false);
 #endif
     outColor = vec4(lit, albedo.a);
+#endif
 #endif
 }
 #endif

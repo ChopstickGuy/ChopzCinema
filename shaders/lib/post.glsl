@@ -79,9 +79,17 @@ vec3 colorGrade(vec3 c) {
 #endif
     graded = mix(c, graded, GRADE_STRENGTH);
 
+    // rain: cooler, more desaturated, a bit more contrast - like a rainy scene in a film
+    float rainMood = rainStrength * RAIN_MOOD;
+    if (rainMood > 0.0) {
+        float lr = luminance(graded);
+        vec3 moody = mix(vec3(lr), graded, 0.7) * vec3(0.93, 0.99, 1.07);
+        graded = mix(graded, moody, rainMood);
+    }
+
     // contrast around middle grey in log space
     vec3 lg = log2(max(graded, 1e-6));
-    lg = (lg - log2(0.18)) * CONTRAST + log2(0.18);
+    lg = (lg - log2(0.18)) * (CONTRAST + rainStrength * RAIN_MOOD * 0.06) + log2(0.18);
     graded = exp2(lg);
     // saturation
     float l2 = luminance(graded);

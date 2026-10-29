@@ -55,6 +55,13 @@ const int noiseTextureResolution = 256;
 #define CAVE_FOG
 #define NETHER_LAVA_GLOW 1.0 // [0.0 0.5 1.0 1.5 2.0]
 
+// ---------- Rain ----------
+#define RAIN_RIPPLES
+#define LIGHTNING_FLASH
+#define RAIN_MOOD 1.0 // [0.0 0.5 1.0 1.5]
+#define RAIN_STREAK_OPACITY 1.0 // [0.25 0.5 0.75 1.0 1.5 2.0]
+#define RAIN_CURTAINS
+
 // ---------- Heat ----------
 #define HEAT_HAZE
 #define HEAT_HAZE_STRENGTH 1.0 // [0.25 0.5 0.75 1.0 1.5 2.0 3.0]

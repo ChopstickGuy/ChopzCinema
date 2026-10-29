@@ -132,6 +132,12 @@ void main() {
             vec3 playerPos = viewToPlayer(opaque.viewPos);
             applyWetness(s, playerPos + cameraPosition);
             if (s.smoothness > 0.45) {
+                // raindrops ripple the puddles
+                float puddle = puddleAmount(playerPos + cameraPosition, s.normal, s.lightmap.y);
+                if (puddle > 0.0) {
+                    vec2 rg = rainRipples((playerPos + cameraPosition).xz) * puddle * smoothstep(40.0, 6.0, length(playerPos));
+                    s.normal = normalize(s.normal + vec3(-rg.x, 0.0, -rg.y));
+                }
                 vec3 viewN = mat3(gbufferModelView) * s.normal;
                 float hitSky;
                 vec3 refl = reflectionColor(opaque.viewPos, viewN, s.normal, s.lightmap.y, s.smoothness, dither, hitSky);

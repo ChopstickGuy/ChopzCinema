@@ -165,6 +165,7 @@ vec3 sunDisk(vec3 rd, vec3 sunDir) {
 }
 
 #include "/lib/nightsky.glsl"
+#include "/lib/rain.glsl"
 
 // Per-frame light colours for the current dimension
 void getFrameLighting(vec3 sunDir, out vec3 lightCol, out vec3 ambient) {
@@ -179,5 +180,7 @@ void getFrameLighting(vec3 sunDir, out vec3 lightCol, out vec3 ambient) {
     ambient = getSkyAmbient(sunDir);
     // faint green glow on the landscape when the northern lights are out
     ambient += vec3(0.1, 1.0, 0.45) * auroraActivity() * 0.004;
+    // lightning lights up the whole landscape for a moment
+    ambient += vec3(0.75, 0.8, 1.0) * lightningFlash() * 1.2;
 #endif
 }

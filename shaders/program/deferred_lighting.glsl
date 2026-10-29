@@ -30,6 +30,7 @@ vec3 renderSky(vec3 dir, vec4 albedoMat) {
     vec3 sky = skyRadiance(dir, sunDir);
     sky += sunDisk(dir, sunDir);
     sky += nightSky(dir, sunDir, ignAnimated(gl_FragCoord.xy), false);
+    sky += vec3(0.7, 0.75, 1.0) * lightningFlash() * 0.8 * smoothstep(-0.1, 0.3, dir.y);
     int mat = int(albedoMat.a * 255.0 + 0.5);
     if (mat == MAT_SKY_OBJECT) {
         // moon texture from gbuffers_skytextured

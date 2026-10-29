@@ -77,6 +77,16 @@ void main() {
         float len = ds.isSky ? 2500.0 : dist;
         float camY = cameraPosition.y;
         float odTotal = fogOpticalDepth(fp, camY, dir.y, len);
+#ifdef RAIN_CURTAINS
+        if (rainStrength > 0.01) {
+            // drifting sheets of heavier rain in the distance
+            float az = atan(dir.z, dir.x);
+            vec2 q = vec2(az * 9.0 + frameTimeCounter * 0.05, dir.y * 0.6 + frameTimeCounter * 0.35);
+            float sheets = textureLod(noisetex, q * vec2(0.35, 0.05), 0.0).x * 0.7
+                         + textureLod(noisetex, q * vec2(1.1, 0.12) + 0.5, 0.0).x * 0.3;
+            odTotal *= 1.0 + rainStrength * (sheets - 0.45) * 1.4 * smoothstep(25.0, 140.0, len);
+        }
+#endif
         float T = exp(-odTotal);
 
         // ambient light in the fog (sky colour), darker in caves
