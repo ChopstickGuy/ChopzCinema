@@ -35,7 +35,7 @@ Grounded, high contrast, modern blockbuster.
 
 - Classic print film curve with **inky blacks**
 - Saturated reds & blues, restrained greens
-- Glowing golden hour, moonlit nights
+- Warm, golden daylight and golden hour, cool moonlit nights
 - Depth of field, anamorphic flare, film grain
 
 **`ChopzCinema-vX.Y.zip`**
@@ -53,7 +53,7 @@ Painterly, poetic, all about wind and colour.
 - Lush, saturated nature & **painterly brush filter**
 - Coral-pink dusks under violet skies
 - **Leaves & petals carried by wind gusts**
-- Glowing coloured haze, teal-green storms
+- Glowing coloured haze, cirrus streaks, teal-green storms
 
 **`ChopzCinema-Story-vX.Y.zip`**
 
@@ -72,7 +72,7 @@ Painterly, poetic, all about wind and colour.
 <td width="33%" valign="top">
 
 ### 🌅 Living sky
-Physically based atmosphere, volumetric clouds, cirrus streaks, real sunsets and a **round sun and moon** with phases.
+Physically based atmosphere, volumetric clouds, real sunsets and a **round sun and moon** with phases.
 
 </td>
 <td width="33%" valign="top">
@@ -188,6 +188,7 @@ Waving plants and leaves with visible **gust fronts** rolling across the land.
 - **Wind-blown leaves & petals**: sparse when calm, bursts in gusts, lots in storms. Mostly green, red petals at dusk. Anchored in the world.
 - **Wind gusts**: visible fronts bend grass and trees as they roll across the land
 - **Coloured haze**: white-gold by day, glowing pink at dusk, violet at night
+- **Cirrus streaks**: thin, slowly drifting high clouds that glow pink around the setting sun
 - **Tsushima grade**: coral/pink dusks, violet skies, teal-green storms, soft saturation ceiling
 
 </details>
@@ -207,7 +208,7 @@ Waving plants and leaves with visible **gust fronts** rolling across the land.
 <summary><b>🌅 Sky, Night & Weather</b></summary>
 
 - Physically based sky (Rayleigh, Mie, ozone), **golden hour** glow
-- **Volumetric clouds** and **cirrus streaks**
+- **Volumetric clouds** (plus **cirrus streaks** in Story)
 - Height fog, distant haze, morning/evening mist, **god rays**
 - Three-layer starry sky, **Milky Way**, shooting stars, rotating with the sky
 - **Round sun** and **round moon** with craters and real moon phases
@@ -219,7 +220,7 @@ Waving plants and leaves with visible **gust fronts** rolling across the land.
 <details>
 <summary><b>🌊 Water, Heat & Nether</b></summary>
 
-- Procedural waves, refraction, absorption, screen-space reflections, sun glitter
+- Natural, irregular waves (rotated noise octaves and gentle swells), refraction, absorption, screen-space reflections, sun glitter
 - **Caustics** and **underwater light shafts**
 - Heat shimmer over lava, fire, magma, campfires and furnaces
 - **Volumetric Nether smoke** lit by the lava ocean, waving lava
@@ -265,7 +266,7 @@ The menu is available in **English** and **German**.
 |---|---|
 | Camera & Film | Exposure, film curve, grade, bloom, lens flare, depth of field, vignette, grain, letterbox, TAA |
 | Story Look | Grade, painterly filter, leaves, leaves density, wind gusts, wind strength, coloured haze, Kurosawa mode |
-| Sky, Clouds & Fog | Volumetric clouds, cirrus, god rays, fog, morning mist, cave fog |
+| Sky, Clouds & Fog | Volumetric clouds, cirrus (Story), god rays, fog, morning mist, cave fog |
 | Night Sky | Round sun & moon, stars, Milky Way, shooting stars, northern lights |
 | Lighting | Sun, sky light, night, torch light & colour temperature |
 | Shadows | Resolution, distance, softness, coloured shadows, sun angle |
@@ -282,7 +283,7 @@ The menu is available in **English** and **German**.
 Both editions come from the same `shaders/` folder. The Story edition only changes default values (see `STORY_DEFAULTS` in `tools/build_packs.py`).
 
 ```bash
-python3 tools/build_packs.py v0.9   # -> dist/ChopzCinema-v0.9.zip + dist/ChopzCinema-Story-v0.9.zip
+python3 tools/build_packs.py v0.10  # -> dist/ChopzCinema-v0.10.zip + dist/ChopzCinema-Story-v0.10.zip
 python3 tools/gen_wrappers.py       # regenerate world0 / world-1 / world1 program wrappers
 ```
 

@@ -120,7 +120,15 @@ vec3 colorGrade(vec3 c) {
     float lum4 = luminance(graded);
     float sh = smoothstep(0.3, 0.02, lum4) * smoothstep(0.0, 0.02, lum4);
     float hi = smoothstep(0.4, 0.9, lum4);
-    graded *= mix(vec3(1.0), vec3(0.9, 1.0, 1.1), sh * 0.7);
+#ifdef DIM_OVERWORLD
+    float day4 = smoothstep(-0.05, 0.25, sunDirWorld().y);
+#else
+    float day4 = 0.0;
+#endif
+    // cool shadows at night, only a hint of it by day
+    graded *= mix(vec3(1.0), vec3(0.9, 1.0, 1.1), sh * mix(0.7, 0.3, day4));
+    // warm daylight white balance: sunny scenes feel golden instead of cold
+    graded *= mix(vec3(1.0), vec3(1.07, 1.01, 0.88), day4 * 0.75);
     graded *= mix(vec3(1.0), vec3(1.07, 1.0, 0.9), hi * 0.7);
 #elif COLOR_GRADE == 5
     // "Tsushima": painterly, lush and warm - saturated nature, golden light,
@@ -159,7 +167,7 @@ vec3 colorGrade(vec3 c) {
 #ifdef DIM_OVERWORLD
     {
         float sy = sunDirWorld().y;
-        float golden = smoothstep(0.35, 0.04, sy) * smoothstep(-0.08, 0.02, sy) * (1.0 - rainStrength);
+        float golden = smoothstep(0.55, 0.04, sy) * smoothstep(-0.08, 0.02, sy) * (1.0 - rainStrength);
         graded *= mix(vec3(1.0), vec3(1.1, 1.0, 0.84), golden * 0.7);
     }
 #endif

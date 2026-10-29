@@ -257,7 +257,12 @@ void main() {
     }
     if (PAINTERLY > 0.0) {
         DepthSample pd = sampleDepth(uv, true);
-        if (pd.isDH || pd.depth >= 0.56) color = painterly(uv, PAINTERLY);
+        if (pd.isDH || pd.depth >= 0.56) {
+            float pdist = pd.isSky ? 1e4 : length(pd.viewPos);
+            // strongest in the mid ground, gone in the far distance and right in front of the lens
+            float w = smoothstep(1.5, 5.0, pdist) * (1.0 - smoothstep(40.0, 140.0, pdist));
+            if (w > 0.01) color = mix(color, painterly(uv, PAINTERLY), w);
+        }
     }
     bool dofApplied;
     vec3 dof = depthOfField(uv, dofApplied);

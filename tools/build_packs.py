@@ -11,9 +11,10 @@ DIST = os.path.join(REPO, "dist")
 # default overrides for the Story pack (define name -> new default)
 STORY_DEFAULTS = {
     "COLOR_GRADE": "5",
-    "PAINTERLY": "1.0",
+    "PAINTERLY": "0.5",
     "FALLING_LEAVES": True,
     "GOLDEN_ATMOSPHERE": True,
+    "CIRRUS_CLOUDS": True,
     "WAVING_STRENGTH": "1.75",
     "FOG_DENSITY": "1.25",
     "MORNING_MIST": "1.0",
@@ -22,7 +23,7 @@ STORY_DEFAULTS = {
     "AMBIENT_BRIGHTNESS": "1.0",
     "VIGNETTE": "0.35",
     "FILM_GRAIN": "0.1",
-    "DOF_STRENGTH": "0.75",
+    "DOF_STRENGTH": "0.25",
     "SUN_SIZE": "1.5",
     "MOON_SIZE": "1.25",
     "NIGHT_BRIGHTNESS": "1.5",

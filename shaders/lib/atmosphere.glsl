@@ -191,7 +191,7 @@ vec4 cirrusClouds(vec3 rd, vec3 sunDir, vec3 lightCol, vec3 ambient) {
 #ifdef CIRRUS_CLOUDS
     if (rd.y <= 0.02) return vec4(0.0);
     vec2 p = rd.xz / (rd.y + 0.1);
-    float t = frameTimeCounter * 0.003;
+    float t = frameTimeCounter * 0.0008;
     // stretch the noise along the wind so it forms long streaks
     vec2 w = vec2(0.87, 0.49);
     vec2 q = vec2(dot(p, w), dot(p, vec2(-w.y, w.x)));
