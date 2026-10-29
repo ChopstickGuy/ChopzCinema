@@ -22,13 +22,14 @@ layout(location = 0) out vec4 outColor;
 
 vec3 renderSky(vec3 dir, vec4 albedoMat) {
 #if defined DIM_NETHER
-    return fogColor * 0.15;
+    return mix(vec3(luminance(fogColor)), fogColor, 0.35) * vec3(0.9, 0.75, 0.65) * 0.12;
 #elif defined DIM_END
     vec3 c = vec3(0.025, 0.015, 0.04) + stars(normalize(dir + vec3(0.0, 0.3, 0.0)), vec3(0.0, -1.0, 0.0)) * 0.6;
     return c;
 #else
     vec3 sky = skyRadiance(dir, sunDir);
     sky += sunDisk(dir, sunDir);
+    sky += moonDisk(dir, sunDir);
     sky += nightSky(dir, sunDir, ignAnimated(gl_FragCoord.xy), false);
     sky += vec3(0.7, 0.75, 1.0) * lightningFlash() * 0.8 * smoothstep(-0.1, 0.3, dir.y);
     int mat = int(albedoMat.a * 255.0 + 0.5);

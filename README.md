@@ -4,7 +4,7 @@
 
 ChopzCinema soll Minecraft wie einen Kinofilm aussehen lassen: starkes Licht- und Schattenspiel, ein Film-Look mit tintenschwarzen Schatten und satten Farben wie in modernen Blockbustern, volumetrische Wolken, Nebel, Lichtstrahlen, ein echter Sternenhimmel mit Polarlichtern und Regen, der sich nach Film anfühlt.
 
-> **Status:** v0.5, Entwicklungsversion. Im Spiel getestet mit Forge 47.4.20, Oculus 1.8.0, Embeddium 0.3.31 und Distant Horizons 3.2.0 in einer generierten Welt. Alle Screenshots unten stammen direkt aus diesem Test.
+> **Status:** v0.6, Entwicklungsversion. Im Spiel getestet mit Forge 47.4.20, Oculus 1.8.0, Embeddium 0.3.31 und Distant Horizons 3.2.0 in einer generierten Welt. Alle Screenshots unten stammen direkt aus diesem Test.
 
 ---
 
@@ -22,9 +22,11 @@ ChopzCinema soll Minecraft wie einen Kinofilm aussehen lassen: starkes Licht- un
 | ![Wald](docs/screenshots/forest.jpg) | ![Gewitter](docs/screenshots/storm.jpg) |
 | **Wald am Morgen**: Schärfentiefe, Lens Flare | **Gewitter**: Regenschlieren, Regenschleier, Filmstimmung |
 | ![Polarlichter](docs/screenshots/aurora.jpg) | ![Nachthimmel](docs/screenshots/night_sky.jpg) |
-| **Polarlichter** (in manchen Nächten) | **Nachthimmel**: Milchstraße, Sterne, Mondlicht |
+| **Polarlichter** (in manchen Nächten) | **Nachthimmel**: runder Mond mit Phasen, Sterne, Polarlichter |
 | ![Unter Wasser](docs/screenshots/underwater.jpg) | ![Nether](docs/screenshots/nether.jpg) |
-| **Unter Wasser**: Lichtstrahlen durch die Wellen | **Nether**: glühende Lava, tintenschwarze Schatten |
+| **Unter Wasser**: Lichtstrahlen durch die Wellen | **Nether**: Lavasee, aufsteigender Rauch, tintenschwarze Schatten |
+| ![Sonne](docs/screenshots/sun.jpg) | |
+| **Runde Sonne** mit weicher Korona | |
 
 ---
 
@@ -56,6 +58,7 @@ ChopzCinema soll Minecraft wie einen Kinofilm aussehen lassen: starkes Licht- un
 - Dunkler Sternenhimmel mit drei Sternebenen, unterschiedlichen Farbtemperaturen und Funkeln
 - **Milchstraße** mit Staubbändern und Nebelflecken
 - Die Sterne drehen sich mit dem Himmel
+- **Runde Sonne** mit Randverdunklung und Korona, **runder Mond** mit Kratern und den echten Mondphasen (statt der eckigen Vanilla-Texturen)
 - **Sternschnuppen**
 - **Polarlichter** in etwa 30 % der Nächte (einstellbar), sie spiegeln sich auch im Wasser
 
@@ -75,6 +78,8 @@ ChopzCinema soll Minecraft wie einen Kinofilm aussehen lassen: starkes Licht- un
 
 ### 🔥 Hitze
 - **Hitzeflimmern** steigt über Lava, Feuer, Magma, Lagerfeuern und Öfen auf
+- **Nether-Rauch**: volumetrischer, langsam aufsteigender Rauch, von unten orange angestrahlt (ähnlich dem „Nether Storm“ in Complementary Unbound)
+- **Wogende Lava**: die Lavaoberfläche bewegt sich langsam
 - Im Nether flimmert die Ferne, und der Nebel über dem Lavameer glüht orange
 
 ### 🏔️ Distant Horizons
@@ -119,12 +124,12 @@ Das Menü gibt es auf **Deutsch** und Englisch:
 |---|---|
 | Kamera & Film | Belichtung, Filmkurve, Grading, Bloom, Lens Flare, Schärfentiefe, Vignette, Korn, Kinobalken, TAA |
 | Himmel, Wolken & Nebel | Wolken (Qualität, Höhe, Dicke, Bedeckung), Lichtstrahlen, Nebel, Morgennebel, Höhlennebel |
-| Nachthimmel | Sterne, Milchstraße, Sternschnuppen, Polarlichter (aus / manche Nächte / jede Nacht) |
+| Nachthimmel | runde Sonne & Mond (Größe), Sterne, Milchstraße, Sternschnuppen, Polarlichter (aus / manche Nächte / jede Nacht) |
 | Beleuchtung | Sonne, Himmelslicht, Nacht, Fackellicht und Farbtemperatur |
 | Schatten | Auflösung, Distanz, Weichheit, farbige Schatten, Sonnenwinkel |
 | Wasser & Reflexionen | Wellen, Klarheit, Kaustiken, Unterwasser-Strahlen, Reflexionen |
 | Regen | Regenschlieren, Tropfen-Ringe, Pfützen, Regenschleier, Blitze, Filmstimmung |
-| Hitze | Hitzeflimmern, Nether-Flimmern, Lava-Glühen |
+| Hitze | Hitzeflimmern, Nether-Flimmern, Lava-Glühen, Nether-Rauch, wogende Lava |
 | Wind | wehende Pflanzen und Blätter |
 
 ---

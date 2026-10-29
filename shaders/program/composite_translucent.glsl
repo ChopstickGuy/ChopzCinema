@@ -37,7 +37,7 @@ vec3 reflectionColor(vec3 viewPos, vec3 viewNormal, vec3 worldNormal, float skyL
         float fade = e.x * e.y;
         vec3 c = texture(colortex3, hit.xy).rgb;
         hitSky = 1.0 - fade;
-        vec3 sky = (skyRadianceCheap(rWorld, sunDir) + nightSky(rWorld, sunDir, dither, true)) * smoothstep(0.2, 0.9, skyLm);
+        vec3 sky = (skyRadianceCheap(rWorld, sunDir) + nightSky(rWorld, sunDir, dither, true) + moonDisk(rWorld, sunDir)) * smoothstep(0.2, 0.9, skyLm);
         return mix(sky, c, fade);
     }
 #endif
@@ -47,7 +47,7 @@ vec3 reflectionColor(vec3 viewPos, vec3 viewNormal, vec3 worldNormal, float skyL
 #elif defined DIM_END
     sky = vec3(0.025, 0.015, 0.04);
 #else
-    sky = skyRadianceCheap(rWorld, sunDir) + nightSky(rWorld, sunDir, dither, true);
+    sky = skyRadianceCheap(rWorld, sunDir) + nightSky(rWorld, sunDir, dither, true) + moonDisk(rWorld, sunDir);
 #endif
     return sky * smoothstep(0.2, 0.9, skyLm);
 }

@@ -31,6 +31,17 @@ void main() {
     }
 #endif
 
+#if defined TERRAIN && defined WAVING_LAVA
+    if (blockId == ID_LAVA && gl_Normal.y > 0.5) {
+        // slow, heavy undulation of the lava surface
+        vec3 wp = (gbufferModelViewInverse * viewPos).xyz + cameraPosition;
+        float t = frameTimeCounter * 0.6;
+        float wave = sin(wp.x * 0.7 + t) * 0.5 + sin(wp.z * 0.9 - t * 1.3) * 0.35 + sin((wp.x + wp.z) * 1.7 + t * 0.7) * 0.15;
+        wp.y += wave * 0.06 - 0.06;
+        viewPos = gbufferModelView * vec4(wp - cameraPosition, 1.0);
+    }
+#endif
+
 #if defined SKY_TEXTURED || defined SKY_BASIC
     gl_Position = gl_ProjectionMatrix * viewPos;
 #else
@@ -77,6 +88,9 @@ void main() {
 #elif defined SKY_TEXTURED
     // only keep the moon - the sun disk is procedural
     if (renderStage == MC_RENDER_STAGE_SUN) discard;
+#ifdef ROUND_SUN_MOON
+    if (renderStage == MC_RENDER_STAGE_MOON) discard;
+#endif
     outAlbedo = vec4(albedo.rgb * albedo.a, float(MAT_SKY_OBJECT) / 255.0);
     outNormalLm = vec4(0.0);
     outMaterial = vec4(0.0);

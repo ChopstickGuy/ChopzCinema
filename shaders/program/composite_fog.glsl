@@ -17,6 +17,24 @@ uniform sampler2D colortex7;
 /* RENDERTARGETS: 3 */
 layout(location = 0) out vec4 outColor;
 
+// bilinear upsample of the half resolution volume buffer incl. transmittance
+vec4 upsampleVolume(vec2 uv) {
+    vec2 halfSize = screenSize() * 0.5;
+    vec2 p = uv * halfSize - 0.5;
+    vec2 base = floor(p);
+    vec2 f = p - base;
+    vec4 sum = vec4(0.0);
+    float wsum = 0.0;
+    for (int i = 0; i < 4; i++) {
+        vec2 o = vec2(i & 1, i >> 1);
+        vec2 w2 = mix(1.0 - f, f, o);
+        float w = w2.x * w2.y + 1e-4;
+        sum += texelFetch(colortex7, ivec2(clamp(base + o, vec2(0.0), halfSize - 1.0)), 0) * w;
+        wsum += w;
+    }
+    return sum / wsum;
+}
+
 // depth aware 2x upsample of the half resolution light shafts
 vec3 upsampleVL(vec2 uv) {
 #ifdef VOLUMETRIC_LIGHT
@@ -54,7 +72,11 @@ void main() {
     float yMid = cameraPosition.y + dir.y * min(dist, 256.0) * 0.5;
     float lavaGlow = exp(-max(yMid - 31.0, 0.0) / 20.0);
     lavaGlow *= 0.85 + 0.15 * sin(frameTimeCounter * 0.7 + yMid * 0.1);
-    vec3 netherFog = fogColor * 0.15 + vec3(1.0, 0.28, 0.04) * lavaGlow * 0.12 * NETHER_LAVA_GLOW;
+#ifdef NETHER_SMOKE
+    vec4 smoke = upsampleVolume(texcoord);
+    color = color * smoke.a + smoke.rgb;
+#endif
+    vec3 netherFog = mix(vec3(luminance(fogColor)), fogColor, 0.35) * vec3(0.9, 0.75, 0.65) * 0.12 + vec3(1.0, 0.28, 0.04) * lavaGlow * 0.12 * NETHER_LAVA_GLOW;
     color = color * T + netherFog * (1.0 - T);
 #elif defined DIM_END
     float T = exp(-dist * 0.0025 * FOG_DENSITY);

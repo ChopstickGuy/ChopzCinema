@@ -190,6 +190,48 @@ vec3 aurora(vec3 rd, float activity, const int steps, float dither) {
     return acc * horizon * activity * 1.1;
 }
 
+// ---------------------------------------------------------------- moon
+// Round procedural moon with craters and the vanilla moon phase.
+vec3 moonDisk(vec3 rd, vec3 sunDir) {
+#ifdef ROUND_SUN_MOON
+    vec3 moonDir = -sunDir;
+    float ang = smallAngle(rd, moonDir);
+    const float baseRadius = 0.028;
+    float r = baseRadius * MOON_SIZE;
+    float glowAng = max(ang - r, 0.0);
+    float vis = (1.0 - rainStrength) * smoothstep(-0.02, 0.0, rd.y);
+    // soft halo around the moon (atmospheric scattering)
+    vec3 halo = vec3(0.55, 0.65, 0.9) * (exp(-glowAng / (r * 1.5)) * 0.012 + exp(-ang / 0.15) * 0.002);
+    if (ang > r * 1.02) return halo * vis * NIGHT_BRIGHTNESS;
+
+    // local 2D coordinates on the disk
+    vec3 right = normalize(cross(moonDir, abs(moonDir.y) > 0.98 ? vec3(0.0, 0.0, 1.0) : vec3(0.0, 1.0, 0.0)));
+    vec3 up = cross(right, moonDir);
+    vec2 uv = vec2(dot(rd - moonDir, right), dot(rd - moonDir, up)) / r;
+    float d2 = dot(uv, uv);
+    vec3 n = vec3(uv, sqrt(max(1.0 - d2, 0.0)));
+
+    // phase: 0 = full moon, 4 = new moon. Light direction rotates around the moon.
+    float phaseAngle = float(moonPhase) * (PI / 4.0);
+    vec3 L = vec3(sin(phaseAngle), 0.0, cos(phaseAngle));
+    float lit = smoothstep(-0.06, 0.12, dot(n, L));
+
+    // surface: dark "seas" + small craters
+    vec3 sp = vec3(uv * 2.2, 3.7);
+    float maria = smoothstep(0.42, 0.62, fbm3(sp));
+    float craters = fbm3(sp * 4.0 + 11.0);
+    float albedo = mix(0.95, 0.55, maria) * (0.85 + 0.3 * craters);
+    float limb = 0.75 + 0.25 * n.z;
+
+    float edge = r * 0.06;
+    float mask = 1.0 - smoothstep(r - edge, r + edge, ang);
+    vec3 surface = vec3(0.92, 0.95, 1.0) * albedo * limb * (lit * 0.32 + 0.004);
+    return (surface * mask + halo) * vis * NIGHT_BRIGHTNESS;
+#else
+    return vec3(0.0);
+#endif
+}
+
 // ---------------------------------------------------------------- everything together
 vec3 nightSky(vec3 rd, vec3 sunDir, float dither, const bool reflection) {
     float night = nightFactor(sunDir);

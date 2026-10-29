@@ -159,11 +159,26 @@ vec3 getSkyAmbient(vec3 sunDir) {
     return a * AMBIENT_BRIGHTNESS;
 }
 
+// angle between two unit vectors, precise for small angles
+float smallAngle(vec3 a, vec3 b) {
+    return 2.0 * asin(clamp(length(a - b) * 0.5, 0.0, 1.0));
+}
+
 vec3 sunDisk(vec3 rd, vec3 sunDir) {
-    float mu = dot(rd, sunDir);
-    float disk = smoothstep(0.99988, 0.99994, mu);
+    float ang = smallAngle(rd, sunDir);
+    const float baseRadius = 0.022;
+    float r = baseRadius * SUN_SIZE;
+    // anti-aliased round edge
+    float edge = r * 0.06;
+    float disk = 1.0 - smoothstep(r - edge, r + edge, ang);
+    // limb darkening: the centre is brighter and slightly whiter than the rim
+    float x = saturate(ang / r);
+    float limb = 0.55 + 0.45 * sqrt(max(1.0 - x * x, 0.0));
+    // soft corona hugging the disk
+    float corona = exp(-max(ang - r, 0.0) / (r * 0.9)) * 0.04 + exp(-ang / 0.12) * 0.004;
     vec3 tr = sunTransmittance(sunDir);
-    return disk * tr * 120.0 * SUN_BRIGHTNESS * (1.0 - rainStrength) * step(-0.01, rd.y);
+    float vis = (1.0 - rainStrength) * smoothstep(-0.02, 0.0, rd.y);
+    return (disk * limb * 60.0 + corona * 10.0) * tr * SUN_BRIGHTNESS * vis;
 }
 
 #include "/lib/nightsky.glsl"

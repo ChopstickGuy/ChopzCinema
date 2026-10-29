@@ -148,7 +148,7 @@ vec2 heatHaze(vec2 uv) {
     // noise scrolls upwards like rising hot air
     vec2 n = textureLod(noisetex, p * 1.6 - vec2(0.0, t * 0.12), 0.0).xy - 0.5;
     n += (textureLod(noisetex, p * 3.7 - vec2(t * 0.02, t * 0.25), 0.0).yx - 0.5) * 0.6;
-    return uv + n * vec2(0.7, 1.0) * heat * 0.006 * HEAT_HAZE_STRENGTH;
+    return uv + n * vec2(0.7, 1.0) * heat * 0.009 * HEAT_HAZE_STRENGTH;
 #else
     return uv;
 #endif

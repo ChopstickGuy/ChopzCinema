@@ -28,6 +28,9 @@ const int noiseTextureResolution = 256;
 #define SPECULAR_HIGHLIGHTS
 
 // ---------- Sky & Atmosphere ----------
+#define ROUND_SUN_MOON
+#define SUN_SIZE 1.0 // [0.5 0.75 1.0 1.25 1.5 2.0]
+#define MOON_SIZE 1.0 // [0.5 0.75 1.0 1.25 1.5 2.0]
 #define STARS
 #define STAR_AMOUNT 1.0 // [0.5 0.75 1.0 1.5 2.0 3.0]
 #define STAR_BRIGHTNESS 1.0 // [0.5 0.75 1.0 1.5 2.0 3.0]
@@ -66,6 +69,9 @@ const int noiseTextureResolution = 256;
 #define HEAT_HAZE
 #define HEAT_HAZE_STRENGTH 1.0 // [0.25 0.5 0.75 1.0 1.5 2.0 3.0]
 #define NETHER_HEAT_HAZE
+#define NETHER_SMOKE
+#define NETHER_SMOKE_DENSITY 1.0 // [0.25 0.5 0.75 1.0 1.5 2.0 3.0]
+#define WAVING_LAVA
 
 // ---------- Water ----------
 #define WATER_WAVES
@@ -114,6 +120,8 @@ const float centerDepthHalflife = 1.5;
 #endif
 #ifdef SPECULAR_HIGHLIGHTS
 #endif
+#ifdef ROUND_SUN_MOON
+#endif
 #ifdef STARS
 #endif
 #ifdef MILKY_WAY
@@ -135,6 +143,10 @@ const float centerDepthHalflife = 1.5;
 #ifdef HEAT_HAZE
 #endif
 #ifdef NETHER_HEAT_HAZE
+#endif
+#ifdef NETHER_SMOKE
+#endif
+#ifdef WAVING_LAVA
 #endif
 #ifdef WATER_WAVES
 #endif
