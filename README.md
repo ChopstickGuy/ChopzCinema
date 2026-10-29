@@ -1,170 +1,171 @@
 # 🎬 ChopzCinema Shaders
 
-**Cineastischer Shader für Minecraft 1.20.1, gemacht für Oculus/Iris und Distant Horizons.**
+**A cinematic shaderpack for Minecraft 1.20.1, made for Oculus/Iris and Distant Horizons.**
 
-ChopzCinema soll Minecraft wie einen Kinofilm aussehen lassen: starkes Licht- und Schattenspiel, ein Film-Look mit tintenschwarzen Schatten und satten Farben wie in modernen Blockbustern, volumetrische Wolken, Nebel, Lichtstrahlen, ein echter Sternenhimmel mit Polarlichtern und Regen, der sich nach Film anfühlt.
+ChopzCinema aims to make Minecraft look like a feature film: strong light and shadow, a film look with inky blacks and rich colours like a modern blockbuster, volumetric clouds, fog, god rays, a real starry sky with northern lights, and rain that feels like a movie scene.
 
-> **Status:** v0.6, Entwicklungsversion. Im Spiel getestet mit Forge 47.4.20, Oculus 1.8.0, Embeddium 0.3.31 und Distant Horizons 3.2.0 in einer generierten Welt. Alle Screenshots unten stammen direkt aus diesem Test.
+> **Status:** v0.7, in development. Tested in-game with Forge 47.4.20, Oculus 1.8.0, Embeddium 0.3.31 and Distant Horizons 3.2.0 in a freshly generated world. Every screenshot below was taken during that test.
 
 ---
 
 ## Screenshots
 
-*Alle Bilder sind echte Ingame-Screenshots (F2) mit dem Standardprofil, Distant Horizons ist aktiv.*
+*All images are real in-game screenshots (F2) with the default profile and Distant Horizons enabled.*
 
-![Sonnenuntergang über dem Tal](docs/screenshots/sunset.jpg)
-*Sonnenuntergang: Nebel im Tal, angestrahlte Wolken, Filmkurve „Brand New Day“*
+![Sunset over the valley](docs/screenshots/sunset.jpg)
+*Sunset: mist in the valley, lit clouds, "Brand New Day" film grade*
 
 | | |
 |---|---|
-| ![Tag](docs/screenshots/day.jpg) | ![Fernsicht mit Distant Horizons](docs/screenshots/dh_far.jpg) |
-| **Tag**: harte Sonne, tiefe Schatten | **Fernsicht mit Distant Horizons**: LODs bis zum Horizont |
-| ![Wald](docs/screenshots/forest.jpg) | ![Gewitter](docs/screenshots/storm.jpg) |
-| **Wald am Morgen**: Schärfentiefe, Lens Flare | **Gewitter**: Regenschlieren, Regenschleier, Filmstimmung |
-| ![Polarlichter](docs/screenshots/aurora.jpg) | ![Nachthimmel](docs/screenshots/night_sky.jpg) |
-| **Polarlichter** (in manchen Nächten) | **Nachthimmel**: runder Mond mit Phasen, Sterne, Polarlichter |
-| ![Unter Wasser](docs/screenshots/underwater.jpg) | ![Nether](docs/screenshots/nether.jpg) |
-| **Unter Wasser**: Lichtstrahlen durch die Wellen | **Nether**: Lavasee, aufsteigender Rauch, tintenschwarze Schatten |
-| ![Sonne](docs/screenshots/sun.jpg) | |
-| **Runde Sonne** mit weicher Korona | |
+| ![Day](docs/screenshots/day.jpg) | ![Distant Horizons view](docs/screenshots/dh_far.jpg) |
+| **Day**: hard sunlight, deep shadows | **Distant Horizons**: LODs all the way to the horizon |
+| ![Forest](docs/screenshots/forest.jpg) | ![Thunderstorm](docs/screenshots/storm.jpg) |
+| **Forest in the morning**: depth of field, lens flare | **Thunderstorm**: rain streaks, rain curtains, film mood |
+| ![Northern lights](docs/screenshots/aurora.jpg) | ![Night sky](docs/screenshots/night_sky.jpg) |
+| **Northern lights** (on some nights) | **Night sky**: round moon with phases, stars |
+| ![Underwater](docs/screenshots/underwater.jpg) | ![Nether](docs/screenshots/nether.jpg) |
+| **Underwater**: light shafts through the waves | **Nether**: lava lake, rising smoke, inky shadows |
+| ![Sun](docs/screenshots/sun.jpg) | ![Full moon](docs/screenshots/moon.jpg) |
+| **Round sun** with a soft corona | **Full moon** with craters and maria |
 
 ---
 
 ## Features
 
-### 🎥 Kamera & Film
-- **Filmkurve** zur Auswahl: AgX Punchy (Standard), ACES oder Uchimura
-- **Color Grading „Brand New Day“** (Standard), inspiriert vom Look von *Spider-Man: Brand New Day*: klassische Filmkopie-Kurve, **tintenschwarze Schatten**, satte Rot- und Blautöne, zurückhaltendes Grün, kühle Schatten und warme Lichter
-- Weitere Gradings: *Blockbuster* (Teal & Orange), *Düster*, *Goldene Stunde*, *Neutral*
-- **Schärfentiefe** wie bei einer Kinokamera (Fokus auf die Bildmitte, nahe Objekte oder der Hintergrund werden weich)
-- Bloom mit rötlichem Film-Glühen (Halation), **anamorphotischer Lens Flare** mit Sonnen-Verdeckungstest
-- Vignette, Filmkorn, leichte chromatische Aberration, optionale **Kinobalken** (2.39:1 / 1.85:1)
-- **TAA** mit Nachschärfen und **automatische Belichtung**, die Nächte bewusst dunkel lässt
+### 🎥 Camera & Film
+- **Film curve** options: AgX Punchy (default), ACES or Uchimura
+- **"Brand New Day" colour grade** (default), inspired by the look of *Spider-Man: Brand New Day*: classic print film curve, **inky blacks**, saturated reds and blues, restrained greens, cool shadows and warm highlights
+- Other grades: *Blockbuster* (teal & orange), *Moody*, *Golden Hour*, *Neutral*
+- **Depth of field** like a cinema camera (focus on the centre of the screen, close objects or the background go soft)
+- Bloom with reddish film halation, **anamorphic lens flare** with a sun occlusion test
+- Vignette, film grain, subtle chromatic aberration, optional **letterbox** (2.39:1 / 1.85:1)
+- **TAA** with sharpening and **auto exposure** that deliberately keeps nights dark
 
-### ☀️ Licht & Schatten
-- Weiche Schatten, die mit dem Abstand zum Schattenwerfer weicher werden (Vogel-PCF)
-- **Farbige Schatten** durch Buntglas
-- Durchscheinende Blätter und Gras im Gegenlicht (Subsurface Scattering)
-- Warmes Fackellicht, die Farbtemperatur ist in Kelvin einstellbar
-- Glanzlichter auf Metall und polierten Blöcken
+### ☀️ Light & Shadow
+- Soft shadows that get softer the further they fall from the caster (Vogel PCF)
+- **Coloured shadows** through stained glass
+- Translucent leaves and grass when backlit (subsurface scattering)
+- Warm torch light with an adjustable colour temperature in Kelvin
+- Specular highlights on metal and polished blocks
 
-### 🌅 Himmel & Atmosphäre
-- **Physikalischer Himmel** (Rayleigh, Mie und Ozon) mit echten Sonnenauf- und -untergängen
-- **Volumetrische Wolken** mit Silberrändern, bei Regen dichter und dunkler
-- **Höhennebel**, Dunst in der Ferne und **Morgen- und Abendnebel** über dem Boden
-- **Lichtstrahlen (God Rays)** im Nebel mit echten Schatten
+### 🌅 Sky & Atmosphere
+- **Physically based sky** (Rayleigh, Mie and ozone) with real sunrises and sunsets
+- **Volumetric clouds** with silver linings that get denser and darker in rain
+- **Height fog**, distant haze and **morning/evening mist** near the ground
+- **God rays** in the fog with real shadows
 
-### 🌌 Nachthimmel
-- Dunkler Sternenhimmel mit drei Sternebenen, unterschiedlichen Farbtemperaturen und Funkeln
-- **Milchstraße** mit Staubbändern und Nebelflecken
-- Die Sterne drehen sich mit dem Himmel
-- **Runde Sonne** mit Randverdunklung und Korona, **runder Mond** mit Kratern und den echten Mondphasen (statt der eckigen Vanilla-Texturen)
-- **Sternschnuppen**
-- **Polarlichter** in etwa 30 % der Nächte (einstellbar), sie spiegeln sich auch im Wasser
+### 🌌 Night Sky
+- Dark starry sky with three star layers, different colour temperatures and twinkling
+- **Milky Way** with dust lanes and nebula patches
+- The stars rotate with the sky
+- **Round sun** with limb darkening and corona, **round moon** with craters and the real moon phases (instead of the blocky vanilla textures)
+- **Shooting stars**
+- **Northern lights** on about 30% of nights (adjustable), also reflected in water
 
-### 🌧️ Regen
-- Dünne, fast durchsichtige Regenschlieren, die im Gegenlicht leuchten und an Fackeln warm werden
-- **Nasse Oberflächen und Pfützen** mit Spiegelungen
-- **Regentropfen-Ringe** auf Pfützen und Wasser
-- **Regenschleier**, die in der Ferne vorbeiziehen
-- **Blitze** erhellen Himmel, Wolken und Landschaft
-- Automatische **Regen-Filmstimmung**: kühler, entsättigter, etwas mehr Kontrast
+### 🌧️ Rain
+- Thin, almost transparent rain streaks that glow when backlit and turn warm near torches
+- **Wet surfaces and puddles** with reflections
+- **Raindrop ripples** on puddles and water
+- **Rain curtains** drifting through the distance
+- **Lightning** lights up the sky, clouds and landscape
+- Automatic **rainy film mood**: cooler, less saturated, a little more contrast
 
-### 🌊 Wasser
-- Prozedurale Wellen, Lichtbrechung und Absorption, also klares Wasser, das mit der Tiefe blaugrün wird
-- Screen-Space-Reflexionen mit Himmel als Rückfall und Sonnenglitzern
-- **Kaustiken**: das bewegte Lichtnetz am Grund
-- **Lichtstrahlen unter Wasser**, die aus den Wellen entstehen. Boote und Terrain werfen Schatten in die Strahlen.
+### 🌊 Water
+- Procedural waves, refraction and absorption: clear water that turns blue-green with depth
+- Screen-space reflections with sky fallback and sun glitter
+- **Caustics**: the moving web of light on the bottom
+- **Underwater light shafts** formed by the waves. Boats and terrain cast shadows into the shafts.
 
-### 🔥 Hitze
-- **Hitzeflimmern** steigt über Lava, Feuer, Magma, Lagerfeuern und Öfen auf
-- **Nether-Rauch**: volumetrischer, langsam aufsteigender Rauch, von unten orange angestrahlt (ähnlich dem „Nether Storm“ in Complementary Unbound)
-- **Wogende Lava**: die Lavaoberfläche bewegt sich langsam
-- Im Nether flimmert die Ferne, und der Nebel über dem Lavameer glüht orange
+### 🔥 Heat
+- **Heat shimmer** rising above lava, fire, magma, campfires and furnaces
+- **Nether smoke**: volumetric, slowly rising smoke lit orange from below (similar to the "Nether Storm" in Complementary Unbound)
+- **Waving lava**: the lava surface slowly heaves
+- In the Nether the distance shimmers and the fog above the lava ocean glows orange
 
 ### 🏔️ Distant Horizons
-- LODs bekommen dieselbe Beleuchtung, denselben Nebel, dieselben Wolken und dasselbe TAA
-- Weicher, gedithereter Übergang zwischen normalen Chunks und LODs
-- Ferne Berge verschwinden im Dunst
+- LODs get the same lighting, fog, clouds and TAA
+- Soft, dithered transition between regular chunks and LODs
+- Distant mountains fade into the haze
 
 ---
 
 ## Installation
 
-1. Die neueste `ChopzCinema-vX.Y.zip` unter [Releases](../../releases) herunterladen.
-2. Die ZIP **nicht entpacken**, sondern nach `.minecraft/shaderpacks/` legen.
-3. Im Spiel: *Optionen → Grafik → Shader-Pakete → ChopzCinema*.
-4. Im Shader-Menü ein Profil wählen: **LOW / MEDIUM / HIGH / ULTRA** (Standard: HIGH).
+1. Download the latest `ChopzCinema-vX.Y.zip` from [Releases](../../releases).
+2. **Don't unzip it.** Put the ZIP into `.minecraft/shaderpacks/`.
+3. In game: *Options → Video Settings → Shader Packs → ChopzCinema*.
+4. Pick a profile in the shader menu: **LOW / MEDIUM / HIGH / ULTRA** (default: HIGH).
 
-### Kompatibilität
+### Compatibility
 | | Version |
 |---|---|
 | Minecraft | 1.20.1 |
-| Forge | Oculus 1.8.0+ und Embeddium |
-| Fabric | Iris 1.7+ und Sodium |
+| Forge | Oculus 1.8.0+ with Embeddium |
+| Fabric | Iris 1.7+ with Sodium |
 | Distant Horizons | 2.2+ / 3.x (optional) |
-| OptiFine | nicht unterstützt (kein DH-Support) |
+| OptiFine | not supported (no DH support) |
 
-### Tipps
-- Für das echte Kino-Format **Kinobalken 2.39:1** unter *Kamera & Film* einschalten.
-- Ist die Schärfentiefe zu stark oder zu schwach, kann sie unter *Kamera & Film → Stärke der Schärfentiefe* angepasst werden.
+### Tips
+- For the real cinema format, enable **Letterbox 2.39:1** under *Camera & Film*.
+- If the depth of field is too strong or too weak, adjust it under *Camera & Film → Depth of Field Strength*.
+- Sun and moon size can be changed under *Night Sky*.
 
-### Performance-Tipps
-- Die größten Stellschrauben sind **Schattenauflösung**, **Wolkenqualität** und **Lichtstrahlen-Qualität**.
-- Wolken und Lichtstrahlen werden ohnehin in halber Auflösung berechnet.
-- Mit Distant Horizons kostet vor allem die LOD-Distanz selbst. Der Shader-Aufwand pro Pixel bleibt gleich.
+### Performance tips
+- The biggest levers are **shadow resolution**, **cloud quality** and **god ray quality**.
+- Clouds, god rays and Nether smoke already render at half resolution.
+- With Distant Horizons, most of the cost comes from the LOD distance itself. The per-pixel shader cost stays the same.
 
 ---
 
-## Einstellungen
+## Settings
 
-Das Menü gibt es auf **Deutsch** und Englisch:
+The menu is available in **English** and **German**:
 
-| Seite | Inhalt |
+| Page | Contents |
 |---|---|
-| Kamera & Film | Belichtung, Filmkurve, Grading, Bloom, Lens Flare, Schärfentiefe, Vignette, Korn, Kinobalken, TAA |
-| Himmel, Wolken & Nebel | Wolken (Qualität, Höhe, Dicke, Bedeckung), Lichtstrahlen, Nebel, Morgennebel, Höhlennebel |
-| Nachthimmel | runde Sonne & Mond (Größe), Sterne, Milchstraße, Sternschnuppen, Polarlichter (aus / manche Nächte / jede Nacht) |
-| Beleuchtung | Sonne, Himmelslicht, Nacht, Fackellicht und Farbtemperatur |
-| Schatten | Auflösung, Distanz, Weichheit, farbige Schatten, Sonnenwinkel |
-| Wasser & Reflexionen | Wellen, Klarheit, Kaustiken, Unterwasser-Strahlen, Reflexionen |
-| Regen | Regenschlieren, Tropfen-Ringe, Pfützen, Regenschleier, Blitze, Filmstimmung |
-| Hitze | Hitzeflimmern, Nether-Flimmern, Lava-Glühen, Nether-Rauch, wogende Lava |
-| Wind | wehende Pflanzen und Blätter |
+| Camera & Film | Exposure, film curve, grade, bloom, lens flare, depth of field, vignette, grain, letterbox, TAA |
+| Sky, Clouds & Fog | Clouds (quality, height, thickness, coverage), god rays, fog, morning mist, cave fog |
+| Night Sky | Round sun & moon (size), stars, Milky Way, shooting stars, northern lights (off / some nights / every night) |
+| Lighting | Sun, sky light, night, torch light and colour temperature |
+| Shadows | Resolution, distance, softness, coloured shadows, sun angle |
+| Water & Reflections | Waves, clarity, caustics, underwater rays, reflections |
+| Rain | Rain streaks, raindrop ripples, puddles, rain curtains, lightning, film mood |
+| Heat | Heat shimmer, Nether shimmer, lava glow, Nether smoke, waving lava |
+| Waving | Waving plants and leaves |
 
 ---
 
-## Technik
+## Technical overview
 
 ```
-shadow      → Shadow Map (+ Wasseroberfläche für Kaustiken)
-gbuffers    → G-Buffer (Albedo, Normalen, Lightmap, Material) – auch dh_terrain
-deferred    → volumetrische Wolken (½ Auflösung)
-deferred1   → Beleuchtung, Himmel, Sterne, Polarlichter, Wolken
-forward     → Wasser, Glas, Partikel, Regen, Hand
-composite   → Lichtbrechung, Wasser-Absorption, Reflexionen, Pfützen
-composite1  → Lichtstrahlen / Unterwasser-Strahlen (½ Auflösung)
-composite2  → Nebel, Regenschleier, Nether-Glühen
-composite3  → TAA + Auto-Belichtung
-final       → Hitzeflimmern, Schärfentiefe, Bloom, Lens Flare, Filmkurve, Grading, Film-Effekte
+shadow      → shadow map (+ water surface for caustics)
+gbuffers    → G-buffer (albedo, normals, lightmap, material) – including dh_terrain
+deferred    → volumetric clouds (½ resolution)
+deferred1   → lighting, sky, sun & moon, stars, northern lights, clouds
+forward     → water, glass, particles, rain, hand
+composite   → refraction, water absorption, reflections, puddles
+composite1  → god rays / underwater rays / Nether smoke (½ resolution)
+composite2  → fog, rain curtains, Nether glow
+composite3  → TAA + auto exposure
+final       → heat shimmer, depth of field, bloom, lens flare, film curve, grade, film effects
 ```
 
 ```
 shaders/
-  shaders.properties   Menü, Profile, Blend-Modi
-  block.properties     Material-IDs (Blätter, Glas, Metall, Lichtquellen, Lava, …)
-  lib/                 gemeinsamer Code (Himmel, Nachthimmel, Wolken, Nebel, Regen, Wasser, Licht, Post)
-  program/             Programme
-  world0|world-1|world1 automatisch erzeugte Wrapper je Dimension
-  lang/                Deutsch / Englisch
-tools_gen_wrappers.py  erzeugt die Wrapper neu
+  shaders.properties   menu, profiles, blend modes
+  block.properties     material ids (leaves, glass, metal, light sources, lava, …)
+  lib/                 shared code (sky, night sky, clouds, fog, rain, water, lighting, post)
+  program/             programs
+  world0|world-1|world1 generated per-dimension wrappers
+  lang/                English / German
+tools_gen_wrappers.py  regenerates the wrappers
 ```
 
 ---
 
 ## Feedback
 
-Probleme bitte als Issue melden und dazu anhängen:
+Please report problems as an issue and attach:
 - `.minecraft/logs/latest.log`
-- Screenshot(s)
-- verwendetes Profil und Grafikkarte
+- screenshot(s)
+- the profile you used and your graphics card

@@ -196,7 +196,7 @@ vec3 moonDisk(vec3 rd, vec3 sunDir) {
 #ifdef ROUND_SUN_MOON
     vec3 moonDir = -sunDir;
     float ang = smallAngle(rd, moonDir);
-    const float baseRadius = 0.028;
+    const float baseRadius = 0.04;
     float r = baseRadius * MOON_SIZE;
     float glowAng = max(ang - r, 0.0);
     float vis = (1.0 - rainStrength) * smoothstep(-0.02, 0.0, rd.y);

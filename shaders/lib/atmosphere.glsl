@@ -166,7 +166,7 @@ float smallAngle(vec3 a, vec3 b) {
 
 vec3 sunDisk(vec3 rd, vec3 sunDir) {
     float ang = smallAngle(rd, sunDir);
-    const float baseRadius = 0.022;
+    const float baseRadius = 0.032;
     float r = baseRadius * SUN_SIZE;
     // anti-aliased round edge
     float edge = r * 0.06;
