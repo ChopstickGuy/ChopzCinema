@@ -120,8 +120,8 @@ void main() {
         {
             float dayF = smoothstep(-0.05, 0.3, sunDir.y);
             float duskF = smoothstep(0.35, 0.05, sunDir.y) * smoothstep(-0.12, 0.0, sunDir.y);
-            vec3 tint = mix(vec3(0.85, 0.75, 1.15), vec3(1.3, 1.05, 0.7), dayF);
-            tint = mix(tint, vec3(1.45, 0.85, 0.5), duskF);   // glowing orange dusk
+            vec3 tint = mix(vec3(0.85, 0.75, 1.2), vec3(1.12, 1.06, 0.95), dayF);  // violet night, soft white day
+            tint = mix(tint, vec3(1.35, 0.82, 0.85), duskF);   // glowing pink dusk
             fogAmbient = mix(fogAmbient, vec3(luminance(fogAmbient)) * tint, 0.6);
         }
 #endif
@@ -133,7 +133,11 @@ void main() {
         float odNear = fogOpticalDepth(fp, camY, dir.y, vlLen);
         float farPart = exp(-odNear) - T;
         float goldenHour = smoothstep(0.4, 0.03, sunDir.y) * smoothstep(-0.06, 0.03, sunDir.y);
-        inscatter += lightColor * fogPhase(mu) * farPart * VL_STRENGTH * caveF * 0.4 * (1.0 + 2.0 * goldenHour);
+        float glowBoost = 1.0 + 2.0 * goldenHour;
+#ifdef GOLDEN_ATMOSPHERE
+        glowBoost += 3.0 * goldenHour;   // the sun bleeds into the haze
+#endif
+        inscatter += lightColor * fogPhase(mu) * farPart * VL_STRENGTH * caveF * 0.4 * glowBoost;
         inscatter += upsampleVL(texcoord);
 #else
         inscatter += lightColor * fogPhase(mu) * (1.0 - T) * 0.25 * caveF;
@@ -153,7 +157,7 @@ void main() {
 
 #if defined FALLING_LEAVES && defined DIM_OVERWORLD
     if (isEyeInWater == 0 && eyeSkylight() > 0.3) {
-        vec4 lv = fallingLeaves(cameraPosition + gbufferModelViewInverse[3].xyz, dir, ds.isSky ? 48.0 : dist, lightDir, lightColor, skyAmbient);
+        vec4 lv = fallingLeaves(cameraPosition + gbufferModelViewInverse[3].xyz, dir, ds.isSky ? 48.0 : dist, lightDir, lightColor, skyAmbient, sunDir);
         color = color * (1.0 - lv.a) + lv.rgb * smoothstep(0.3, 0.6, eyeSkylight());
     }
 #endif

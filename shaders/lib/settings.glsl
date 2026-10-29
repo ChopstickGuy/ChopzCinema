@@ -43,6 +43,8 @@ const int noiseTextureResolution = 256;
 
 // ---------- Volumetric clouds ----------
 #define VOLUMETRIC_CLOUDS
+#define CIRRUS_CLOUDS
+#define CIRRUS_AMOUNT 1.0 // [0.5 1.0 1.5 2.0]
 #define CLOUD_QUALITY 1 // [0 1 2]
 #define CLOUD_HEIGHT 230.0 // [160.0 190.0 230.0 260.0 300.0 350.0]
 #define CLOUD_THICKNESS 180.0 // [100.0 140.0 180.0 240.0 300.0]
@@ -137,6 +139,8 @@ const float centerDepthHalflife = 1.5;
 #ifdef SHOOTING_STARS
 #endif
 #ifdef VOLUMETRIC_CLOUDS
+#endif
+#ifdef CIRRUS_CLOUDS
 #endif
 #ifdef VOLUMETRIC_LIGHT
 #endif

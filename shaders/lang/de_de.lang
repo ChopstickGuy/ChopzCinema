@@ -118,3 +118,5 @@ option.LEAVES_DENSITY=Dichte der Blätter
 option.WIND_GUSTS=Windböen
 option.GOLDEN_ATMOSPHERE=Goldener, farbiger Dunst
 option.KUROSAWA_MODE=Kurosawa-Modus (Schwarzweiß)
+option.CIRRUS_CLOUDS=Federwolken (Cirrus)
+option.CIRRUS_AMOUNT=Menge der Federwolken

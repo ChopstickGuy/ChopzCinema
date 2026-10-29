@@ -28,6 +28,8 @@ vec3 renderSky(vec3 dir, vec4 albedoMat) {
     return c;
 #else
     vec3 sky = skyRadiance(dir, sunDir);
+    vec4 cirrus = cirrusClouds(dir, sunDir, lightColor, skyAmbient);
+    sky = mix(sky, cirrus.rgb, cirrus.a);
     sky += sunDisk(dir, sunDir);
     sky += moonDisk(dir, sunDir);
     sky += nightSky(dir, sunDir, ignAnimated(gl_FragCoord.xy), false);

@@ -186,6 +186,32 @@ vec3 sunDisk(vec3 rd, vec3 sunDir) {
 #include "/lib/nightsky.glsl"
 #include "/lib/rain.glsl"
 
+// High, wispy cirrus streaks painted onto the sky dome. rgb = colour, a = coverage
+vec4 cirrusClouds(vec3 rd, vec3 sunDir, vec3 lightCol, vec3 ambient) {
+#ifdef CIRRUS_CLOUDS
+    if (rd.y <= 0.02) return vec4(0.0);
+    vec2 p = rd.xz / (rd.y + 0.1);
+    float t = frameTimeCounter * 0.003;
+    // stretch the noise along the wind so it forms long streaks
+    vec2 w = vec2(0.87, 0.49);
+    vec2 q = vec2(dot(p, w), dot(p, vec2(-w.y, w.x)));
+    q *= vec2(0.45, 1.7);
+    float n = textureLod(noisetex, q * 0.04 + vec2(t, 0.0), 0.0).x * 0.55
+            + textureLod(noisetex, q * 0.11 + vec2(t * 1.7, 0.3), 0.0).x * 0.3
+            + textureLod(noisetex, q * 0.29 + 0.6, 0.0).x * 0.15;
+    float region = textureLod(noisetex, p * 0.006 + 0.2, 0.0).x;   // where streaks appear at all
+    float c = smoothstep(0.56, 0.98, n) * smoothstep(0.45, 0.75, region + 0.1 * CIRRUS_AMOUNT);
+    c *= smoothstep(0.02, 0.18, rd.y) * (1.0 - rainStrength) * min(CIRRUS_AMOUNT, 1.5);
+    if (c <= 0.0) return vec4(0.0);
+    float mu = dot(rd, sunDir);
+    // thin ice crystals light up strongly around the sun (pink/orange at dusk)
+    vec3 col = lightCol * (0.2 + 1.4 * pow(saturate(mu * 0.5 + 0.5), 6.0)) + ambient * 1.3;
+    return vec4(col, c * 0.32);
+#else
+    return vec4(0.0);
+#endif
+}
+
 // Per-frame light colours for the current dimension
 void getFrameLighting(vec3 sunDir, out vec3 lightCol, out vec3 ambient) {
 #if defined DIM_NETHER

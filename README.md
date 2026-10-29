@@ -5,12 +5,12 @@
 | | **ChopzCinema** | **ChopzCinema Story** |
 |---|---|---|
 | Inspiration | *Spider-Man: Brand New Day*: modern blockbuster | *Ghost of Tsushima*: painterly samurai epic |
-| Look | Inky blacks, print film curve, saturated reds & blues, crisp | Lush saturated nature, golden light, soft violet shadows, painted |
+| Look | Inky blacks, print film curve, saturated reds & blues, crisp | Lush nature, hot pink-magenta dusks, violet skies, soft violet shadows, painted |
 | Atmosphere | Clear, physically based haze, dramatic contrast | Golden coloured haze, layered mist, glowing dusks |
-| Extras | Depth of field, anamorphic flare, film grain | Painterly brush filter, falling leaves & petals, strong wind gusts |
+| Extras | Depth of field, anamorphic flare, film grain | Painterly brush filter, wind-blown leaves & petals in gusts, strong wind |
 | Download | `ChopzCinema-vX.Y.zip` | `ChopzCinema-Story-vX.Y.zip` |
 
-> **Status:** v0.8, in development. Tested in-game with Forge 47.4.20, Oculus 1.8.0, Embeddium 0.3.31 and Distant Horizons 3.2.0 in a freshly generated world. Every screenshot below was taken during those tests (F2, default settings, Distant Horizons enabled).
+> **Status:** v0.9, in development. Tested in-game with Forge 47.4.20, Oculus 1.8.0, Embeddium 0.3.31 and Distant Horizons 3.2.0 in a freshly generated world. Every screenshot below was taken during those tests (F2, default settings, Distant Horizons enabled).
 
 ---
 
@@ -38,19 +38,19 @@
 
 ## 🌸 ChopzCinema Story
 
-*The painterly edition: all-in on the Ghost of Tsushima look. Saturated nature, golden light, coloured haze, wind and leaves everywhere.*
+*The painterly edition: all-in on the Ghost of Tsushima look. Saturated nature, magenta dusks with violet skies, glowing coloured haze, and leaves that the wind throws through the air in gusts.*
 
 ![ChopzCinema Story sunset](docs/screenshots/story/sunset.jpg)
-*Dusk in Story: glowing haze, painted light, big warm sun*
+*Dusk in Story: coral-pink clouds, violet sky, the sun bleeding into the haze*
 
 | | |
 |---|---|
 | ![Story day](docs/screenshots/story/day.jpg) | ![Story distant view](docs/screenshots/story/dh_far.jpg) |
 | **Day**: lush greens, golden hills, soft shadows | **Distant view**: layered mist like an ink painting |
 | ![Story forest](docs/screenshots/story/forest.jpg) | ![Story water](docs/screenshots/story/water_sunset.jpg) |
-| **Forest**: falling leaves and petals, painterly filter | **Coast at dusk**: warm haze, drifting leaves |
+| **Morning in the forest**: cirrus streaks, painterly filter | **Coast at dusk**: pink-violet haze, drifting petals |
 | ![Story night](docs/screenshots/story/night.jpg) | ![Story storm](docs/screenshots/story/storm.jpg) |
-| **Night**: blue-violet moonlight, northern lights | **Storm**: soft, misty, painted |
+| **Night**: blue-violet moonlight, northern lights | **Storm**: teal-green mist, leaves flying in the wind |
 | ![Story water](docs/screenshots/story/water.jpg) | ![Story nether](docs/screenshots/story/nether.jpg) |
 | **Water** | **Nether**: warm and painterly |
 
@@ -69,9 +69,11 @@
 
 ### 🌸 Story look (on by default in Story, optional in Cinema)
 - **Painterly filter**: an edge-preserving brush-stroke filter that turns surfaces into painted colour areas
-- **Falling leaves & petals**: cherry petals, red maple and golden leaves drifting on the wind, anchored in the world
+- **Wind-blown leaves & petals**: sparse most of the time, bursts when a gust rolls through, many in storms. Mostly green leaves, red petals at dusk, a little gold. Anchored in the world.
 - **Wind gusts**: visible gust fronts roll across grass and trees and bend everything one way
-- **Golden coloured haze**: warm aerial perspective by day, glowing orange at dusk, violet at night
+- **Coloured haze**: soft white-gold haze by day, the sun bleeding into glowing pink haze at dusk, violet at night
+- **Tsushima dusks**: oranges turn hot pink-red, blue skies turn violet, with a soft saturation ceiling so colours stay rich without clipping
+- **Teal-green storms**
 
 ### ☀️ Light & Shadow
 - Soft shadows that get softer the further they fall from the caster (Vogel PCF)
@@ -84,6 +86,7 @@
 - **Physically based sky** (Rayleigh, Mie and ozone) with real sunrises and sunsets
 - **Golden hour**: warm glow around a low sun and golden light in the haze
 - **Volumetric clouds** with silver linings that get denser and darker in rain
+- **Cirrus streak clouds**: thin high-altitude streaks that light up pink and orange around the setting sun
 - **Height fog**, distant haze and **morning/evening mist**
 - **God rays** in the fog with real shadows
 
@@ -172,7 +175,7 @@ The menu is available in **English** and **German**:
 Both editions are built from the same `shaders/` folder. The Story edition only changes default values in `shaders/lib/settings.glsl`.
 
 ```
-python3 tools/build_packs.py v0.8          # -> dist/ChopzCinema-v0.8.zip, dist/ChopzCinema-Story-v0.8.zip
+python3 tools/build_packs.py v0.9          # -> dist/ChopzCinema-v0.9.zip, dist/ChopzCinema-Story-v0.9.zip
 python3 tools/gen_wrappers.py               # regenerate world0/world-1/world1 program wrappers
 ```
 

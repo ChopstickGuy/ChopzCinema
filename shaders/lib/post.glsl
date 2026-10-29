@@ -131,7 +131,20 @@ vec3 colorGrade(vec3 c) {
     float red5 = max(smoothstep(0.09, 0.0, h5), smoothstep(0.92, 1.0, h5));
     float yellow5 = exp(-sq((h5 - 0.13) / 0.06));
     hsv5.x -= green5 * 0.025;                    // greens lean towards golden yellow-green
-    hsv5.y = saturate(hsv5.y * (1.4 + 0.35 * red5 + 0.2 * yellow5));
+#ifdef DIM_OVERWORLD
+    {
+        // Tsushima dusk: oranges turn hot pink-red, blues turn violet
+        float sy = sunDirWorld().y;
+        float dusk5 = smoothstep(0.4, 0.04, sy) * smoothstep(-0.15, 0.0, sy) * (1.0 - rainStrength);
+        float orange5 = exp(-sq((h5 - 0.08) / 0.07));
+        float blue5 = exp(-sq((h5 - 0.62) / 0.1));
+        hsv5.x += (-0.04 * orange5 + 0.06 * blue5) * dusk5;
+        hsv5.x = fract(hsv5.x);
+        hsv5.y *= 1.0 + 0.08 * dusk5;
+    }
+#endif
+    hsv5.y = hsv5.y * (1.4 + 0.25 * red5 + 0.2 * yellow5);
+    hsv5.y = 0.9 * (1.0 - exp(-hsv5.y * 1.9));   // soft saturation ceiling: no flat, clipped colour areas
     graded = hsv2rgb(hsv5);
     float lum5 = luminance(graded);
     graded = graded * 0.95 + vec3(0.032, 0.026, 0.055) * (1.0 - smoothstep(0.0, 0.35, lum5));
@@ -155,7 +168,11 @@ vec3 colorGrade(vec3 c) {
     float rainMood = rainStrength * RAIN_MOOD;
     if (rainMood > 0.0) {
         float lr = luminance(graded);
+#if COLOR_GRADE == 5
+        vec3 moody = mix(vec3(lr), graded, 0.75) * vec3(0.9, 1.05, 0.98);   // Tsushima storms lean teal-green
+#else
         vec3 moody = mix(vec3(lr), graded, 0.7) * vec3(0.93, 0.99, 1.07);
+#endif
         graded = mix(graded, moody, rainMood);
     }
 

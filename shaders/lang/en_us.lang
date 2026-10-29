@@ -118,3 +118,5 @@ option.LEAVES_DENSITY=Leaves Density
 option.WIND_GUSTS=Wind Gusts
 option.GOLDEN_ATMOSPHERE=Golden Coloured Haze
 option.KUROSAWA_MODE=Kurosawa Mode (black & white)
+option.CIRRUS_CLOUDS=Cirrus Streak Clouds
+option.CIRRUS_AMOUNT=Cirrus Amount
