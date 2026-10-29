@@ -1,5 +1,4 @@
-#version 330 compatibility
+#version 330 core
 #define DIM_OVERWORLD
-#define LINE
 #define VERTEX
-#include "/program/forward.glsl"
+#include "/program/line.glsl"

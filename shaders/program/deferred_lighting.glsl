@@ -22,7 +22,7 @@ layout(location = 0) out vec4 outColor;
 
 vec3 renderSky(vec3 dir, vec4 albedoMat) {
 #if defined DIM_NETHER
-    return fogColor * 0.4;
+    return fogColor * 0.15;
 #elif defined DIM_END
     vec3 c = vec3(0.025, 0.015, 0.04) + stars(normalize(dir + vec3(0.0, 0.3, 0.0)), vec3(0.0, -1.0, 0.0)) * 0.6;
     return c;
@@ -34,7 +34,7 @@ vec3 renderSky(vec3 dir, vec4 albedoMat) {
     int mat = int(albedoMat.a * 255.0 + 0.5);
     if (mat == MAT_SKY_OBJECT) {
         // moon texture from gbuffers_skytextured
-        sky += albedoMat.rgb * vec3(0.8, 0.9, 1.0) * 2.5 * NIGHT_BRIGHTNESS * (1.0 - rainStrength);
+        sky += albedoMat.rgb * vec3(0.8, 0.9, 1.0) * 0.3 * NIGHT_BRIGHTNESS * (1.0 - rainStrength);
     }
     return sky;
 #endif
@@ -64,7 +64,11 @@ void main() {
         s.sss = m.b;
         s.metal = m.a;
         s.ao = 1.0;
-        if (mat == MAT_LAVA) s.emission = 1.5;
+        if (mat == MAT_LAVA) {
+            // keep lava saturated: push the texture towards deep orange and limit its brightness
+            s.albedo = s.albedo * vec3(1.0, 0.62, 0.3);
+            s.emission = 0.2;
+        }
 
         applyWetness(s, playerPos + cameraPosition);
 

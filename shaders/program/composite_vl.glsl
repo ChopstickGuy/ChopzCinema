@@ -63,7 +63,7 @@ void main() {
             float sh = getShadowFast(p);
             sum += vec3(dens * sh * exp(-od) * dt);
         }
-        sum *= lightColor * fogPhase(mu) * VL_STRENGTH;
+        sum *= lightColor * fogPhase(mu) * VL_STRENGTH * 0.4;
         // inside caves the sun doesn't reach the fog anyway; avoids light leaking through the shadow map edge
         sum *= smoothstep(0.0, 0.4, eyeSkylight());
     }

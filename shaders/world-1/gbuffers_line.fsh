@@ -1,4 +1,3 @@
-#version 330 compatibility
+#version 330 core
 #define DIM_NETHER
-#define LINE
-#include "/program/forward.glsl"
+#include "/program/line.glsl"

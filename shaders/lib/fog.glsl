@@ -13,7 +13,7 @@ FogParams getFogParams(vec3 sunDir) {
     FogParams f;
     float lowSun = smoothstep(0.45, 0.02, abs(sunDir.y));
     float night = smoothstep(0.05, -0.15, sunDir.y);
-    f.hazeDensity = 0.0006 * FOG_DENSITY * (1.0 + rainStrength * 1.5);
+    f.hazeDensity = 0.0005 * FOG_DENSITY * (1.0 + rainStrength * 1.5);
     f.hazeHeight = 90.0;
     float mist = MORNING_MIST * (0.15 + lowSun * 0.85 + night * 0.25) + rainStrength * 0.5;
     f.mistDensity = 0.010 * mist * FOG_DENSITY;

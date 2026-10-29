@@ -75,7 +75,7 @@ vec3 shadeSurface(Surface s, vec3 playerPos, vec3 lightDir, vec3 lightColor, vec
             // light shining through leaves / grass when looking towards the sun
             float back = saturate(-nlRaw);
             float vPhase = pow(saturate(dot(-v, lightDir)), 4.0);
-            diffuse += lit * s.sss * (back * 0.35 + vPhase * 0.9) * s.albedo;
+            diffuse += lit * s.sss * (back * 0.2 + vPhase * 0.3) * s.albedo;
         }
 #endif
         direct = diffuse;

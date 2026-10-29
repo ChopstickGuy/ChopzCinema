@@ -13,6 +13,8 @@ const vec3 ATMO_OZONE = vec3(0.650e-6, 1.881e-6, 0.085e-6);
 const float SKY_GAIN = 18.0;
 
 const float MOON_ILLUM = 0.035;
+// direct sun is several times stronger than the sky light - that's what gives real contrast
+const float SUN_ILLUM = 3.0;
 
 float rayleighPhase(float mu) { return 3.0 / (16.0 * PI) * (1.0 + mu * mu); }
 float hgPhase(float mu, float g) {
@@ -106,14 +108,14 @@ vec3 sunTransmittance(vec3 sunDir) {
 
 // Colour of direct sunlight / moonlight reaching the ground
 vec3 getSunlight(vec3 sunDir) {
-    vec3 c = sunTransmittance(sunDir) * SUN_BRIGHTNESS;
+    vec3 c = sunTransmittance(sunDir) * SUN_ILLUM * SUN_BRIGHTNESS;
     // soften the transition when the sun touches the horizon
     c *= smoothstep(-0.03, 0.04, sunDir.y);
     return c * (1.0 - 0.85 * rainStrength);
 }
 vec3 getMoonlight(vec3 sunDir) {
     vec3 moonDir = -sunDir;
-    vec3 c = vec3(0.55, 0.7, 1.0) * MOON_ILLUM * NIGHT_BRIGHTNESS;
+    vec3 c = vec3(0.55, 0.7, 1.0) * MOON_ILLUM * 2.0 * NIGHT_BRIGHTNESS;
     c *= smoothstep(-0.03, 0.1, moonDir.y);
     return c * (1.0 - 0.75 * rainStrength);
 }

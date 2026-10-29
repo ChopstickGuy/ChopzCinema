@@ -30,7 +30,7 @@ vec3 agx(vec3 v) {
     // "punchy" look: a bit more contrast and saturation
     v = pow(max(v, 0.0), vec3(1.2));
     float l = dot(v, vec3(0.2126, 0.7152, 0.0722));
-    v = l + 1.25 * (v - l);
+    v = l + 1.1 * (v - l);
     v = agxOut * v;
     return clamp(pow(max(v, 0.0), vec3(2.2)), 0.0, 1.0);
 }
@@ -59,6 +59,27 @@ vec3 tonemap(vec3 c) {
 }
 
 // ---------------------------------------------------------------- grading (display-referred, linear)
+vec3 rgb2hsv(vec3 c) {
+    vec4 K = vec4(0.0, -1.0 / 3.0, 2.0 / 3.0, -1.0);
+    vec4 p = mix(vec4(c.bg, K.wz), vec4(c.gb, K.xy), step(c.b, c.g));
+    vec4 q = mix(vec4(p.xyw, c.r), vec4(c.r, p.yzx), step(p.x, c.r));
+    float d = q.x - min(q.w, q.y);
+    return vec3(abs(q.z + (q.w - q.y) / (6.0 * d + 1e-10)), d / (q.x + 1e-10), q.x);
+}
+vec3 hsv2rgb(vec3 c) {
+    vec3 p = abs(fract(c.xxx + vec3(1.0, 2.0 / 3.0, 1.0 / 3.0)) * 6.0 - 3.0);
+    return c.z * mix(vec3(1.0), clamp(p - 1.0, 0.0, 1.0), c.y);
+}
+
+// Print film style curve on display-referred linear values:
+// crushed, inky toe ("shadows are not grey, they're black") and a firm S in the mids.
+vec3 printCurve(vec3 c) {
+    vec3 p = pow(max(c, 0.0), vec3(1.0 / 2.2));
+    p = max(p - 0.025, 0.0) / (1.0 - 0.025);        // black crush
+    p = mix(p, p * p * (3.0 - 2.0 * p), 0.4);        // S-curve
+    return pow(p, vec3(2.2));
+}
+
 vec3 colorGrade(vec3 c) {
     float l = luminance(c);
     vec3 graded = c;
@@ -76,6 +97,24 @@ vec3 colorGrade(vec3 c) {
     // "Golden hour": warm overall, soft highlights
     graded *= vec3(1.08, 1.0, 0.85);
     graded = mix(graded, vec3(l) * vec3(1.1, 0.95, 0.75), 0.08);
+#elif COLOR_GRADE == 4
+    // "Brand New Day": classic print curve, inky blacks, saturated reds and blues,
+    // restrained greens, cool shadows / warm highlights
+    graded = printCurve(graded);
+    vec3 hsv = rgb2hsv(graded);
+    float h = hsv.x;
+    float red = max(smoothstep(0.09, 0.0, h), smoothstep(0.92, 1.0, h));
+    float blue = exp(-sq((h - 0.61) / 0.07));
+    float green = exp(-sq((h - 0.28) / 0.10));
+    hsv.y *= 1.0 + 0.35 * red + 0.3 * blue - 0.32 * green;
+    hsv.x += green * 0.015;                 // foliage drifts a touch towards teal like print film
+    hsv.y = saturate(hsv.y);
+    graded = hsv2rgb(hsv);
+    float lum4 = luminance(graded);
+    float sh = smoothstep(0.3, 0.02, lum4) * smoothstep(0.0, 0.02, lum4);
+    float hi = smoothstep(0.4, 0.9, lum4);
+    graded *= mix(vec3(1.0), vec3(0.9, 1.0, 1.1), sh * 0.7);
+    graded *= mix(vec3(1.0), vec3(1.07, 1.0, 0.9), hi * 0.7);
 #endif
     graded = mix(c, graded, GRADE_STRENGTH);
 

@@ -24,7 +24,7 @@ PROGRAMS = {
     "gbuffers_spidereyes": ("forward", ["EMISSIVE_ONLY"]),
     "gbuffers_beaconbeam": ("forward", ["EMISSIVE_ONLY"]),
     "gbuffers_armor_glint": ("forward", ["GLINT"]),
-    "gbuffers_line": ("forward", ["LINE"]),
+    "gbuffers_line": ("line", []),
     "gbuffers_clouds": ("forward", ["CLOUDS"]),
     "deferred": ("deferred_clouds", []),
     "deferred1": ("deferred_lighting", []),
@@ -38,7 +38,9 @@ for d, dimdef in DIMS.items():
     os.makedirs(os.path.join(ROOT, d), exist_ok=True)
     for prog, (src, defs) in PROGRAMS.items():
         for ext, stage in (("vsh", "VERTEX"), ("fsh", "FRAGMENT")):
-            lines = ["#version 330 compatibility", "#define " + dimdef]
+            # gbuffers_line breaks with the compatibility profile on Iris/Oculus
+            version = "#version 330 core" if prog == "gbuffers_line" else "#version 330 compatibility"
+            lines = [version, "#define " + dimdef]
             lines += ["#define " + x for x in defs]
             if stage == "VERTEX":
                 lines.append("#define VERTEX")

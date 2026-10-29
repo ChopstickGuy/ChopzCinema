@@ -54,7 +54,7 @@ void main() {
     float yMid = cameraPosition.y + dir.y * min(dist, 256.0) * 0.5;
     float lavaGlow = exp(-max(yMid - 31.0, 0.0) / 20.0);
     lavaGlow *= 0.85 + 0.15 * sin(frameTimeCounter * 0.7 + yMid * 0.1);
-    vec3 netherFog = fogColor * 0.4 + vec3(1.0, 0.32, 0.06) * lavaGlow * 0.35 * NETHER_LAVA_GLOW;
+    vec3 netherFog = fogColor * 0.15 + vec3(1.0, 0.28, 0.04) * lavaGlow * 0.12 * NETHER_LAVA_GLOW;
     color = color * T + netherFog * (1.0 - T);
 #elif defined DIM_END
     float T = exp(-dist * 0.0025 * FOG_DENSITY);
@@ -99,10 +99,10 @@ void main() {
         float vlLen = min(len, shadowDistance);
         float odNear = fogOpticalDepth(fp, camY, dir.y, vlLen);
         float farPart = exp(-odNear) - T;
-        inscatter += lightColor * fogPhase(mu) * farPart * VL_STRENGTH * caveF;
+        inscatter += lightColor * fogPhase(mu) * farPart * VL_STRENGTH * caveF * 0.4;
         inscatter += upsampleVL(texcoord);
 #else
-        inscatter += lightColor * fogPhase(mu) * (1.0 - T) * 0.6 * caveF;
+        inscatter += lightColor * fogPhase(mu) * (1.0 - T) * 0.25 * caveF;
 #endif
         color = color * T + inscatter;
 

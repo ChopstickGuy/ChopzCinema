@@ -2,31 +2,29 @@
 
 **Cineastischer Shader für Minecraft 1.20.1, gemacht für Oculus/Iris und Distant Horizons.**
 
-ChopzCinema soll Minecraft wie einen Kinofilm aussehen lassen: starkes Licht- und Schattenspiel, Teal-&-Orange-Grading wie in modernen Blockbustern, volumetrische Wolken, Nebel, Lichtstrahlen, ein echter Sternenhimmel mit Polarlichtern und Regen, der sich nach Film anfühlt.
+ChopzCinema soll Minecraft wie einen Kinofilm aussehen lassen: starkes Licht- und Schattenspiel, ein Film-Look mit tintenschwarzen Schatten und satten Farben wie in modernen Blockbustern, volumetrische Wolken, Nebel, Lichtstrahlen, ein echter Sternenhimmel mit Polarlichtern und Regen, der sich nach Film anfühlt.
 
-> **Status:** v0.4, Entwicklungsversion. Alle Shader-Programme kompilieren für Overworld, Nether und End mit einem echten OpenGL-Compiler. Ingame-Screenshots folgen.
+> **Status:** v0.5, Entwicklungsversion. Im Spiel getestet mit Forge 47.4.20, Oculus 1.8.0, Embeddium 0.3.31 und Distant Horizons 3.2.0 in einer generierten Welt. Alle Screenshots unten stammen direkt aus diesem Test.
 
 ---
 
-## Vorschau
+## Screenshots
 
-> Diese Bilder kommen aus dem Test-Renderer des Projekts. Er verwendet denselben Shader-Code für Himmel, Wolken, Wasser und Farbgebung wie das Spiel, rendert aber nur eine Testebene statt einer Minecraft-Welt. Echte Ingame-Screenshots kommen unter [Screenshots aus dem Spiel](#screenshots-aus-dem-spiel) dazu.
+*Alle Bilder sind echte Ingame-Screenshots (F2) mit dem Standardprofil, Distant Horizons ist aktiv.*
 
-| Tag | Sonnenuntergang |
+![Sonnenuntergang über dem Tal](docs/screenshots/sunset.jpg)
+*Sonnenuntergang: Nebel im Tal, angestrahlte Wolken, Filmkurve „Brand New Day“*
+
+| | |
 |---|---|
-| ![Tag](docs/previews/tag.png) | ![Sonnenuntergang](docs/previews/sonnenuntergang.png) |
-| **Regen** | **Regentropfen auf einer Pfütze** |
-| ![Regen](docs/previews/regen.png) | ![Regentropfen](docs/previews/regentropfen.png) |
-| **Sternenhimmel mit Milchstraße** | **Polarlichter** |
-| ![Sternenhimmel](docs/previews/sternenhimmel.png) | ![Polarlichter](docs/previews/polarlichter.png) |
-
-**Kaustiken unter Wasser** (1,5 / 4 / 10 Blöcke tief):
-
-![Kaustiken](docs/previews/kaustiken.png)
-
-## Screenshots aus dem Spiel
-
-*Folgen. Geplant: Wald bei Sonnenaufgang mit Nebel und Lichtstrahlen, Fernsicht mit Distant Horizons, Gewitter im Dorf, Unterwasser, Lavasee im Nether, Polarlichter über einem See.*
+| ![Tag](docs/screenshots/day.jpg) | ![Fernsicht mit Distant Horizons](docs/screenshots/dh_far.jpg) |
+| **Tag**: harte Sonne, tiefe Schatten | **Fernsicht mit Distant Horizons**: LODs bis zum Horizont |
+| ![Wald](docs/screenshots/forest.jpg) | ![Gewitter](docs/screenshots/storm.jpg) |
+| **Wald am Morgen**: Schärfentiefe, Lens Flare | **Gewitter**: Regenschlieren, Regenschleier, Filmstimmung |
+| ![Polarlichter](docs/screenshots/aurora.jpg) | ![Nachthimmel](docs/screenshots/night_sky.jpg) |
+| **Polarlichter** (in manchen Nächten) | **Nachthimmel**: Milchstraße, Sterne, Mondlicht |
+| ![Unter Wasser](docs/screenshots/underwater.jpg) | ![Nether](docs/screenshots/nether.jpg) |
+| **Unter Wasser**: Lichtstrahlen durch die Wellen | **Nether**: glühende Lava, tintenschwarze Schatten |
 
 ---
 
@@ -34,8 +32,10 @@ ChopzCinema soll Minecraft wie einen Kinofilm aussehen lassen: starkes Licht- un
 
 ### 🎥 Kamera & Film
 - **Filmkurve** zur Auswahl: AgX Punchy (Standard), ACES oder Uchimura
-- **Color Grading** zur Auswahl: *Blockbuster* (Teal & Orange), *Düster*, *Goldene Stunde* oder *Neutral*
-- Bloom mit warmem Film-Glühen (Halation), **anamorphotischer Lens Flare** mit Sonnen-Verdeckungstest
+- **Color Grading „Brand New Day“** (Standard), inspiriert vom Look von *Spider-Man: Brand New Day*: klassische Filmkopie-Kurve, **tintenschwarze Schatten**, satte Rot- und Blautöne, zurückhaltendes Grün, kühle Schatten und warme Lichter
+- Weitere Gradings: *Blockbuster* (Teal & Orange), *Düster*, *Goldene Stunde*, *Neutral*
+- **Schärfentiefe** wie bei einer Kinokamera (Fokus auf die Bildmitte, nahe Objekte oder der Hintergrund werden weich)
+- Bloom mit rötlichem Film-Glühen (Halation), **anamorphotischer Lens Flare** mit Sonnen-Verdeckungstest
 - Vignette, Filmkorn, leichte chromatische Aberration, optionale **Kinobalken** (2.39:1 / 1.85:1)
 - **TAA** mit Nachschärfen und **automatische Belichtung**, die Nächte bewusst dunkel lässt
 
@@ -100,6 +100,10 @@ ChopzCinema soll Minecraft wie einen Kinofilm aussehen lassen: starkes Licht- un
 | Distant Horizons | 2.2+ / 3.x (optional) |
 | OptiFine | nicht unterstützt (kein DH-Support) |
 
+### Tipps
+- Für das echte Kino-Format **Kinobalken 2.39:1** unter *Kamera & Film* einschalten.
+- Ist die Schärfentiefe zu stark oder zu schwach, kann sie unter *Kamera & Film → Stärke der Schärfentiefe* angepasst werden.
+
 ### Performance-Tipps
 - Die größten Stellschrauben sind **Schattenauflösung**, **Wolkenqualität** und **Lichtstrahlen-Qualität**.
 - Wolken und Lichtstrahlen werden ohnehin in halber Auflösung berechnet.
@@ -113,7 +117,7 @@ Das Menü gibt es auf **Deutsch** und Englisch:
 
 | Seite | Inhalt |
 |---|---|
-| Kamera & Film | Belichtung, Filmkurve, Grading, Bloom, Lens Flare, Vignette, Korn, Kinobalken, TAA |
+| Kamera & Film | Belichtung, Filmkurve, Grading, Bloom, Lens Flare, Schärfentiefe, Vignette, Korn, Kinobalken, TAA |
 | Himmel, Wolken & Nebel | Wolken (Qualität, Höhe, Dicke, Bedeckung), Lichtstrahlen, Nebel, Morgennebel, Höhlennebel |
 | Nachthimmel | Sterne, Milchstraße, Sternschnuppen, Polarlichter (aus / manche Nächte / jede Nacht) |
 | Beleuchtung | Sonne, Himmelslicht, Nacht, Fackellicht und Farbtemperatur |
@@ -137,7 +141,7 @@ composite   → Lichtbrechung, Wasser-Absorption, Reflexionen, Pfützen
 composite1  → Lichtstrahlen / Unterwasser-Strahlen (½ Auflösung)
 composite2  → Nebel, Regenschleier, Nether-Glühen
 composite3  → TAA + Auto-Belichtung
-final       → Hitzeflimmern, Bloom, Lens Flare, Filmkurve, Grading, Film-Effekte
+final       → Hitzeflimmern, Schärfentiefe, Bloom, Lens Flare, Filmkurve, Grading, Film-Effekte
 ```
 
 ```

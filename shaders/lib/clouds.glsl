@@ -113,7 +113,7 @@ vec4 renderClouds(vec3 playerDir, float rayLen, vec3 sunDir, vec3 lightCol, vec3
         // multiple scattering approximation (3 octaves)
         float beer = exp(-lod) + exp(-lod * 0.25) * 0.4 + exp(-lod * 0.06) * 0.15;
         float powder = 1.0 - exp(-d * 2.5);
-        vec3 sun = lightCol * beer * phase * mix(1.0, powder, 0.6) * 1.1;
+        vec3 sun = lightCol * beer * phase * mix(1.0, powder, 0.6) * 0.45;
         vec3 amb = ambient * (0.3 + h * 0.7) * 1.4;
         vec3 s = (sun + amb) * d * sigma;
         float tr = exp(-d * sigma * dt);

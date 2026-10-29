@@ -50,6 +50,7 @@ const bool colortex3MipmapEnabled = true;
 uniform sampler2D colortex0;
 uniform sampler2D colortex3;
 uniform sampler2D colortex9;
+uniform float centerDepthSmooth;
 
 in vec2 texcoord;
 flat in vec3 sunScreen;
@@ -60,18 +61,19 @@ layout(location = 0) out vec4 fragColor;
 // ---------------------------------------------------------------- bloom
 vec3 bloomTap(vec2 uv, float lod) {
     vec2 ts = exp2(lod) / screenSize();
-    // 3x3 tent filter made of 4 bilinear taps
-    vec3 c = textureLod(colortex3, uv + vec2(-0.5, -0.5) * ts, lod).rgb
-           + textureLod(colortex3, uv + vec2( 0.5, -0.5) * ts, lod).rgb
-           + textureLod(colortex3, uv + vec2(-0.5,  0.5) * ts, lod).rgb
-           + textureLod(colortex3, uv + vec2( 0.5,  0.5) * ts, lod).rgb;
-    return c * 0.25;
+    // 3x3 tent over one texel of this mip level: hides the blocky look of small mips
+    vec3 c = textureLod(colortex3, uv, lod).rgb * 4.0;
+    c += (textureLod(colortex3, uv + vec2(ts.x, 0.0), lod).rgb + textureLod(colortex3, uv - vec2(ts.x, 0.0), lod).rgb
+        + textureLod(colortex3, uv + vec2(0.0, ts.y), lod).rgb + textureLod(colortex3, uv - vec2(0.0, ts.y), lod).rgb) * 2.0;
+    c += textureLod(colortex3, uv + ts, lod).rgb + textureLod(colortex3, uv - ts, lod).rgb
+       + textureLod(colortex3, uv + vec2(ts.x, -ts.y), lod).rgb + textureLod(colortex3, uv + vec2(-ts.x, ts.y), lod).rgb;
+    return c / 16.0;
 }
 vec3 getBloom(vec2 uv) {
     vec3 b = vec3(0.0);
     float wsum = 0.0;
-    for (int i = 2; i <= 7; i++) {
-        float w = pow(float(i) - 1.0, 0.7);
+    for (int i = 1; i <= 5; i++) {
+        float w = 1.0 / (float(i) - 0.5);
         b += bloomTap(uv, float(i)) * w;
         wsum += w;
     }
@@ -88,18 +90,20 @@ vec3 lensFlare(vec2 uv) {
     float aspect = viewWidth / viewHeight;
     vec2 d = (uv - sunScreen.xy) * vec2(aspect, 1.0);
     // horizontal streak, slightly blue like an anamorphic lens
-    float streak = exp(-abs(d.y) * 260.0) * exp(-abs(d.x) * 2.2);
-    vec3 col = streak * vec3(0.45, 0.65, 1.0) * 0.5;
+    // short, soft streak (wide in x, thin in y) - present but not dominating
+    float streak = exp(-abs(d.y) * 180.0) * exp(-abs(d.x) * 6.0);
+    streak += exp(-abs(d.y) * 60.0) * exp(-abs(d.x) * 14.0) * 0.3;
+    vec3 col = streak * vec3(0.45, 0.65, 1.0) * 0.18;
     // soft ghosts along the axis through the screen centre
     vec2 axis = vec2(0.5) - sunScreen.xy;
     for (int i = 1; i <= 3; i++) {
         vec2 gp = sunScreen.xy + axis * (float(i) * 0.7);
         float r = 0.03 + float(i) * 0.025;
         float g = smoothstep(r, r * 0.6, length((uv - gp) * vec2(aspect, 1.0)));
-        col += g * mix(vec3(1.0, 0.6, 0.3), vec3(0.3, 0.6, 1.0), float(i) / 3.0) * 0.02;
+        col += g * mix(vec3(1.0, 0.6, 0.3), vec3(0.3, 0.6, 1.0), float(i) / 3.0) * 0.004;
     }
     // stronger at low sun, when it's most cinematic
-    return col * flareColor * vis * 1.5;
+    return col * flareColor * vis * 0.5;
 #else
     return vec3(0.0);
 #endif
@@ -150,8 +154,57 @@ vec2 heatHaze(vec2 uv) {
 #endif
 }
 
+// ---------------------------------------------------------------- depth of field
+float viewDistAt(vec2 uv) {
+    DepthSample d = sampleDepth(uv, true);
+    if (!d.isDH && d.depth < 0.56) return -1.0; // hand
+    return d.isSky ? 4000.0 : length(d.viewPos);
+}
+
+// circle of confusion in pixels for a given distance
+float cocPixels(float dist, float focus) {
+    if (dist < 0.0) return 0.0;
+    // thin lens: blur grows with the difference of inverse distances, so far scenery
+    // stays sharp and only things close to the lens (or a close focus) go soft
+    float c = abs(1.0 / focus - 1.0 / dist);
+    return min(c * 14.0 * DOF_STRENGTH * viewHeight / 1080.0, 5.0 * DOF_STRENGTH);
+}
+
+vec3 depthOfField(vec2 uv, out bool applied) {
+    applied = false;
+#ifdef DEPTH_OF_FIELD
+    vec3 fv = screenToView(vec3(0.5, 0.5, centerDepthSmooth), gbufferProjectionInverse);
+    float focus = centerDepthSmooth >= 0.9999 ? 256.0 : clamp(length(fv), 0.5, 256.0);
+    float dist = viewDistAt(uv);
+    float coc = cocPixels(dist, focus);
+    if (coc < 0.6) return vec3(0.0);
+    applied = true;
+    vec2 px = 1.0 / screenSize();
+    vec3 sum = vec3(0.0);
+    float wsum = 0.0;
+    const int taps = 16;
+    float rot = ign(gl_FragCoord.xy) * TAU;
+    for (int i = 0; i < taps; i++) {
+        float r = sqrt((float(i) + 0.5) / float(taps)) * coc;
+        float a = float(i) * 2.39996 + rot;
+        vec2 o = vec2(cos(a), sin(a)) * r * px;
+        float sDist = viewDistAt(uv + o);
+        // a sharp sample may only contribute if it is behind us in focus terms (no halo bleed)
+        float sCoc = sDist < 0.0 ? coc : cocPixels(sDist, focus);
+        float w = smoothstep(r - 1.0, r + 0.5, max(sCoc, sDist > dist ? coc : 0.0));
+        w = max(w, 0.02);
+        sum += textureLod(colortex3, uv + o, log2(max(coc * 0.25, 1.0))).rgb * w;
+        wsum += w;
+    }
+    return sum / wsum;
+#else
+    return vec3(0.0);
+#endif
+}
+
 void main() {
     vec2 uv = heatHaze(texcoord);
+
 
     // letterbox
 #if LETTERBOX > 0
@@ -178,6 +231,9 @@ void main() {
     } else {
         color = texture(colortex3, uv).rgb;
     }
+    bool dofApplied;
+    vec3 dof = depthOfField(uv, dofApplied);
+    if (dofApplied) color = dof;
 
 #ifdef TAA
     // light sharpening to counter the softness of temporal AA
@@ -193,8 +249,8 @@ void main() {
 #ifdef BLOOM
     vec3 bloom = getBloom(uv);
     // slight warm halation tint like film
-    bloom *= vec3(1.08, 0.98, 0.9);
-    color = mix(color, bloom, 0.06 * BLOOM_STRENGTH * (1.0 + rainStrength));
+    bloom *= vec3(1.2, 0.96, 0.82); // red-orange halation like film
+    color = mix(color, bloom, 0.075 * BLOOM_STRENGTH * (1.0 + rainStrength));
 #endif
     color += lensFlare(uv);
 

@@ -101,3 +101,6 @@ option.RAIN_RIPPLES=Raindrop Ripples
 option.RAIN_CURTAINS=Rain Curtains in the Distance
 option.LIGHTNING_FLASH=Lightning Flashes
 option.RAIN_MOOD=Rainy Film Mood
+value.COLOR_GRADE.4=Brand New Day (inky blacks, print film)
+option.DEPTH_OF_FIELD=Depth of Field
+option.DOF_STRENGTH=Depth of Field Strength

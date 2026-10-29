@@ -101,3 +101,6 @@ option.RAIN_RIPPLES=Regentropfen-Ringe
 option.RAIN_CURTAINS=Regenschleier in der Ferne
 option.LIGHTNING_FLASH=Blitzlicht
 option.RAIN_MOOD=Regen-Filmstimmung
+value.COLOR_GRADE.4=Brand New Day (tiefe Schwärzen, Filmkopie)
+option.DEPTH_OF_FIELD=Schärfentiefe
+option.DOF_STRENGTH=Stärke der Schärfentiefe
