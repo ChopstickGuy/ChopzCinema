@@ -308,5 +308,7 @@ final       → heat shimmer, painterly filter, DOF, bloom, flare, film curve, g
 Found a bug or have an idea? **[Open an issue](../../issues)** and attach your `.minecraft/logs/latest.log`, a screenshot, the edition and profile you used, and your graphics card.
 
 <div align="center">
+<sub>© 2026 ChopstickGuy. All rights reserved. You're welcome to use the shaders and share screenshots and videos; please don't re-upload or redistribute the packs or code as your own.</sub>
+<br>
 <sub>ChopzCinema is a fan project and is not affiliated with Mojang, Marvel, Sony or Sucker Punch. <i>Spider-Man: Brand New Day</i> and <i>Ghost of Tsushima</i> are only named as visual inspiration.</sub>
 </div>
