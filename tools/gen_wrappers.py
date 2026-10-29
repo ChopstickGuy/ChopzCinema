@@ -1,6 +1,6 @@
 # Generates the per-dimension program wrappers (world0/world-1/world1).
 import os
-ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "shaders")
+ROOT = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "shaders")
 DIMS = {"world0": "DIM_OVERWORLD", "world-1": "DIM_NETHER", "world1": "DIM_END"}
 # program name -> (source file, extra defines)
 PROGRAMS = {

@@ -1,100 +1,130 @@
 # 🎬 ChopzCinema Shaders
 
-**A cinematic shaderpack for Minecraft 1.20.1, made for Oculus/Iris and Distant Horizons.**
+**Cinematic shaderpacks for Minecraft 1.20.1, made for Oculus/Iris and Distant Horizons. Two editions from one codebase:**
 
-ChopzCinema aims to make Minecraft look like a feature film: strong light and shadow, a film look with inky blacks and rich colours like a modern blockbuster, volumetric clouds, fog, god rays, a real starry sky with northern lights, and rain that feels like a movie scene.
+| | **ChopzCinema** | **ChopzCinema Story** |
+|---|---|---|
+| Inspiration | *Spider-Man: Brand New Day*: modern blockbuster | *Ghost of Tsushima*: painterly samurai epic |
+| Look | Inky blacks, print film curve, saturated reds & blues, crisp | Lush saturated nature, golden light, soft violet shadows, painted |
+| Atmosphere | Clear, physically based haze, dramatic contrast | Golden coloured haze, layered mist, glowing dusks |
+| Extras | Depth of field, anamorphic flare, film grain | Painterly brush filter, falling leaves & petals, strong wind gusts |
+| Download | `ChopzCinema-vX.Y.zip` | `ChopzCinema-Story-vX.Y.zip` |
 
-> **Status:** v0.7, in development. Tested in-game with Forge 47.4.20, Oculus 1.8.0, Embeddium 0.3.31 and Distant Horizons 3.2.0 in a freshly generated world. Every screenshot below was taken during that test.
+> **Status:** v0.8, in development. Tested in-game with Forge 47.4.20, Oculus 1.8.0, Embeddium 0.3.31 and Distant Horizons 3.2.0 in a freshly generated world. Every screenshot below was taken during those tests (F2, default settings, Distant Horizons enabled).
 
 ---
 
-## Screenshots
+## 🎥 ChopzCinema
 
-*All images are real in-game screenshots (F2) with the default profile and Distant Horizons enabled.*
+*The cinematic edition: grounded, high-contrast and filmic, inspired by the look of Spider-Man: Brand New Day.*
 
-![Sunset over the valley](docs/screenshots/sunset.jpg)
-*Sunset: mist in the valley, lit clouds, "Brand New Day" film grade*
+![ChopzCinema sunset](docs/screenshots/cinema/sunset.jpg)
+*Golden hour: warm glow, mist in the valley, deep shadows*
 
 | | |
 |---|---|
-| ![Day](docs/screenshots/day.jpg) | ![Distant Horizons view](docs/screenshots/dh_far.jpg) |
-| **Day**: hard sunlight, deep shadows | **Distant Horizons**: LODs all the way to the horizon |
-| ![Forest](docs/screenshots/forest.jpg) | ![Thunderstorm](docs/screenshots/storm.jpg) |
-| **Forest in the morning**: depth of field, lens flare | **Thunderstorm**: rain streaks, rain curtains, film mood |
-| ![Northern lights](docs/screenshots/aurora.jpg) | ![Night sky](docs/screenshots/night_sky.jpg) |
-| **Northern lights** (on some nights) | **Night sky**: round moon with phases, stars |
-| ![Underwater](docs/screenshots/underwater.jpg) | ![Nether](docs/screenshots/nether.jpg) |
+| ![Day](docs/screenshots/cinema/day.jpg) | ![Distant Horizons](docs/screenshots/cinema/dh_far.jpg) |
+| **Day**: strong sun, readable shadows | **Distant Horizons**: clear view to the horizon |
+| ![Night](docs/screenshots/cinema/night.jpg) | ![Thunderstorm](docs/screenshots/cinema/storm.jpg) |
+| **Night**: northern lights, moonlit landscape | **Thunderstorm**: rain streaks and curtains |
+| ![Water](docs/screenshots/cinema/water.jpg) | ![Water at sunset](docs/screenshots/cinema/water_sunset.jpg) |
+| **Water**: clear, reflective, sun glitter | **Water at sunset** |
+| ![Underwater](docs/screenshots/cinema/underwater.jpg) | ![Nether](docs/screenshots/cinema/nether.jpg) |
 | **Underwater**: light shafts through the waves | **Nether**: lava lake, rising smoke, inky shadows |
-| ![Sun](docs/screenshots/sun.jpg) | ![Full moon](docs/screenshots/moon.jpg) |
-| **Round sun** with a soft corona | **Full moon** with craters and maria |
+| ![Sun](docs/screenshots/cinema/sun.jpg) | ![Full moon](docs/screenshots/cinema/moon.jpg) |
+| **Round sun** with soft corona | **Full moon** with craters and phases |
 
 ---
 
-## Features
+## 🌸 ChopzCinema Story
+
+*The painterly edition: all-in on the Ghost of Tsushima look. Saturated nature, golden light, coloured haze, wind and leaves everywhere.*
+
+![ChopzCinema Story sunset](docs/screenshots/story/sunset.jpg)
+*Dusk in Story: glowing haze, painted light, big warm sun*
+
+| | |
+|---|---|
+| ![Story day](docs/screenshots/story/day.jpg) | ![Story distant view](docs/screenshots/story/dh_far.jpg) |
+| **Day**: lush greens, golden hills, soft shadows | **Distant view**: layered mist like an ink painting |
+| ![Story forest](docs/screenshots/story/forest.jpg) | ![Story water](docs/screenshots/story/water_sunset.jpg) |
+| **Forest**: falling leaves and petals, painterly filter | **Coast at dusk**: warm haze, drifting leaves |
+| ![Story night](docs/screenshots/story/night.jpg) | ![Story storm](docs/screenshots/story/storm.jpg) |
+| **Night**: blue-violet moonlight, northern lights | **Storm**: soft, misty, painted |
+| ![Story water](docs/screenshots/story/water.jpg) | ![Story nether](docs/screenshots/story/nether.jpg) |
+| **Water** | **Nether**: warm and painterly |
+
+---
+
+## Features (both editions)
 
 ### 🎥 Camera & Film
 - **Film curve** options: AgX Punchy (default), ACES or Uchimura
-- **"Brand New Day" colour grade** (default), inspired by the look of *Spider-Man: Brand New Day*: classic print film curve, **inky blacks**, saturated reds and blues, restrained greens, cool shadows and warm highlights
-- Other grades: *Blockbuster* (teal & orange), *Moody*, *Golden Hour*, *Neutral*
-- **Depth of field** like a cinema camera (focus on the centre of the screen, close objects or the background go soft)
-- Bloom with reddish film halation, **anamorphic lens flare** with a sun occlusion test
+- **Colour grades**: *Brand New Day* (Cinema default), *Tsushima* (Story default), *Blockbuster* (teal & orange), *Moody*, *Golden Hour*, *Neutral*
+- **Depth of field** like a cinema camera
+- Bloom with film halation, **anamorphic lens flare** with a sun occlusion test
 - Vignette, film grain, subtle chromatic aberration, optional **letterbox** (2.39:1 / 1.85:1)
-- **TAA** with sharpening and **auto exposure** that deliberately keeps nights dark
+- **TAA** with sharpening and **auto exposure**
+- **Kurosawa mode**: black & white samurai film look with hard contrast and heavy grain
+
+### 🌸 Story look (on by default in Story, optional in Cinema)
+- **Painterly filter**: an edge-preserving brush-stroke filter that turns surfaces into painted colour areas
+- **Falling leaves & petals**: cherry petals, red maple and golden leaves drifting on the wind, anchored in the world
+- **Wind gusts**: visible gust fronts roll across grass and trees and bend everything one way
+- **Golden coloured haze**: warm aerial perspective by day, glowing orange at dusk, violet at night
 
 ### ☀️ Light & Shadow
 - Soft shadows that get softer the further they fall from the caster (Vogel PCF)
 - **Coloured shadows** through stained glass
 - Translucent leaves and grass when backlit (subsurface scattering)
-- Warm torch light with an adjustable colour temperature in Kelvin
+- Warm torch light with an adjustable colour temperature
 - Specular highlights on metal and polished blocks
 
 ### 🌅 Sky & Atmosphere
 - **Physically based sky** (Rayleigh, Mie and ozone) with real sunrises and sunsets
+- **Golden hour**: warm glow around a low sun and golden light in the haze
 - **Volumetric clouds** with silver linings that get denser and darker in rain
-- **Height fog**, distant haze and **morning/evening mist** near the ground
+- **Height fog**, distant haze and **morning/evening mist**
 - **God rays** in the fog with real shadows
 
 ### 🌌 Night Sky
-- Dark starry sky with three star layers, different colour temperatures and twinkling
+- Starry sky with three star layers, colour temperatures and twinkling, rotating with the sky
 - **Milky Way** with dust lanes and nebula patches
-- The stars rotate with the sky
-- **Round sun** with limb darkening and corona, **round moon** with craters and the real moon phases (instead of the blocky vanilla textures)
+- **Round sun** and **round moon** with craters and the real moon phases
 - **Shooting stars**
 - **Northern lights** on about 30% of nights (adjustable), also reflected in water
+- Moonlit nights that stay dark but readable
 
 ### 🌧️ Rain
-- Thin, almost transparent rain streaks that glow when backlit and turn warm near torches
-- **Wet surfaces and puddles** with reflections
-- **Raindrop ripples** on puddles and water
-- **Rain curtains** drifting through the distance
-- **Lightning** lights up the sky, clouds and landscape
-- Automatic **rainy film mood**: cooler, less saturated, a little more contrast
+- Thin rain streaks that glow when backlit
+- **Wet surfaces and puddles** with reflections and **raindrop ripples**
+- **Rain curtains** in the distance, **lightning** that lights up the world
+- Automatic **rainy film mood**
 
 ### 🌊 Water
-- Procedural waves, refraction and absorption: clear water that turns blue-green with depth
-- Screen-space reflections with sky fallback and sun glitter
-- **Caustics**: the moving web of light on the bottom
-- **Underwater light shafts** formed by the waves. Boats and terrain cast shadows into the shafts.
+- Procedural waves, refraction and absorption: clear water that turns deep blue with depth
+- Screen-space reflections with sky and moon fallback, sun glitter
+- **Caustics** on the bottom and **underwater light shafts**
 
 ### 🔥 Heat
-- **Heat shimmer** rising above lava, fire, magma, campfires and furnaces
-- **Nether smoke**: volumetric, slowly rising smoke lit orange from below (similar to the "Nether Storm" in Complementary Unbound)
-- **Waving lava**: the lava surface slowly heaves
-- In the Nether the distance shimmers and the fog above the lava ocean glows orange
+- **Heat shimmer** above lava, fire, magma, campfires and furnaces
+- **Nether smoke**: volumetric, slowly rising smoke lit orange from below
+- **Waving lava** and a glowing lava ocean haze
 
 ### 🏔️ Distant Horizons
 - LODs get the same lighting, fog, clouds and TAA
 - Soft, dithered transition between regular chunks and LODs
-- Distant mountains fade into the haze
 
 ---
 
 ## Installation
 
-1. Download the latest `ChopzCinema-vX.Y.zip` from [Releases](../../releases).
+1. Download the edition you want from [Releases](../../releases): `ChopzCinema-vX.Y.zip` and/or `ChopzCinema-Story-vX.Y.zip`. You can install both side by side.
 2. **Don't unzip it.** Put the ZIP into `.minecraft/shaderpacks/`.
-3. In game: *Options → Video Settings → Shader Packs → ChopzCinema*.
+3. In game: *Options → Video Settings → Shader Packs* and pick the edition.
 4. Pick a profile in the shader menu: **LOW / MEDIUM / HIGH / ULTRA** (default: HIGH).
+
+Every option is shared: you can turn the Story features on in ChopzCinema (menu page *Story Look*) or switch Story to the *Brand New Day* grade.
 
 ### Compatibility
 | | Version |
@@ -107,13 +137,14 @@ ChopzCinema aims to make Minecraft look like a feature film: strong light and sh
 
 ### Tips
 - For the real cinema format, enable **Letterbox 2.39:1** under *Camera & Film*.
-- If the depth of field is too strong or too weak, adjust it under *Camera & Film → Depth of Field Strength*.
-- Sun and moon size can be changed under *Night Sky*.
+- Too much or too little depth of field? *Camera & Film → Depth of Field Strength*.
+- Sun and moon size: *Night Sky*.
+- Painterly filter, leaves and wind strength: *Story Look*.
 
 ### Performance tips
 - The biggest levers are **shadow resolution**, **cloud quality** and **god ray quality**.
-- Clouds, god rays and Nether smoke already render at half resolution.
-- With Distant Horizons, most of the cost comes from the LOD distance itself. The per-pixel shader cost stays the same.
+- Clouds, god rays and Nether smoke render at half resolution.
+- The painterly filter and falling leaves cost a little extra. Turn them down in *Story Look* if needed.
 
 ---
 
@@ -124,8 +155,9 @@ The menu is available in **English** and **German**:
 | Page | Contents |
 |---|---|
 | Camera & Film | Exposure, film curve, grade, bloom, lens flare, depth of field, vignette, grain, letterbox, TAA |
+| Story Look | Grade, painterly filter, falling leaves, leaves density, wind gusts, wind strength, golden haze, Kurosawa mode |
 | Sky, Clouds & Fog | Clouds (quality, height, thickness, coverage), god rays, fog, morning mist, cave fog |
-| Night Sky | Round sun & moon (size), stars, Milky Way, shooting stars, northern lights (off / some nights / every night) |
+| Night Sky | Round sun & moon (size), stars, Milky Way, shooting stars, northern lights |
 | Lighting | Sun, sky light, night, torch light and colour temperature |
 | Shadows | Resolution, distance, softness, coloured shadows, sun angle |
 | Water & Reflections | Waves, clarity, caustics, underwater rays, reflections |
@@ -134,6 +166,17 @@ The menu is available in **English** and **German**:
 | Waving | Waving plants and leaves |
 
 ---
+
+## Building
+
+Both editions are built from the same `shaders/` folder. The Story edition only changes default values in `shaders/lib/settings.glsl`.
+
+```
+python3 tools/build_packs.py v0.8          # -> dist/ChopzCinema-v0.8.zip, dist/ChopzCinema-Story-v0.8.zip
+python3 tools/gen_wrappers.py               # regenerate world0/world-1/world1 program wrappers
+```
+
+The Story defaults live in `STORY_DEFAULTS` in `tools/build_packs.py`.
 
 ## Technical overview
 
@@ -145,20 +188,9 @@ deferred1   → lighting, sky, sun & moon, stars, northern lights, clouds
 forward     → water, glass, particles, rain, hand
 composite   → refraction, water absorption, reflections, puddles
 composite1  → god rays / underwater rays / Nether smoke (½ resolution)
-composite2  → fog, rain curtains, Nether glow
+composite2  → fog, golden haze, rain curtains, falling leaves, Nether glow
 composite3  → TAA + auto exposure
-final       → heat shimmer, depth of field, bloom, lens flare, film curve, grade, film effects
-```
-
-```
-shaders/
-  shaders.properties   menu, profiles, blend modes
-  block.properties     material ids (leaves, glass, metal, light sources, lava, …)
-  lib/                 shared code (sky, night sky, clouds, fog, rain, water, lighting, post)
-  program/             programs
-  world0|world-1|world1 generated per-dimension wrappers
-  lang/                English / German
-tools_gen_wrappers.py  regenerates the wrappers
+final       → heat shimmer, painterly filter, depth of field, bloom, lens flare, film curve, grade, film effects
 ```
 
 ---
@@ -168,4 +200,4 @@ tools_gen_wrappers.py  regenerates the wrappers
 Please report problems as an issue and attach:
 - `.minecraft/logs/latest.log`
 - screenshot(s)
-- the profile you used and your graphics card
+- the edition and profile you used and your graphics card

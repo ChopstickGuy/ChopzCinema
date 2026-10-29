@@ -154,6 +154,30 @@ vec2 heatHaze(vec2 uv) {
 #endif
 }
 
+// ---------------------------------------------------------------- painterly filter
+// Kuwahara filter: picks the calmest of four neighbourhoods -> flat, brush-stroke like areas
+vec3 painterly(vec2 uv, float strength) {
+    int r = clamp(int(strength * 2.0 + 0.5), 1, 4);
+    vec2 px = (viewHeight / 1080.0) / screenSize();
+    vec3 bestMean = vec3(0.0);
+    float bestVar = 1e9;
+    for (int q = 0; q < 4; q++) {
+        vec2 dirq = vec2((q & 1) == 0 ? -1.0 : 1.0, (q & 2) == 0 ? -1.0 : 1.0);
+        vec3 m = vec3(0.0), m2 = vec3(0.0);
+        float n = 0.0;
+        for (int y = 0; y <= r; y++) for (int x = 0; x <= r; x++) {
+            vec3 c = texture(colortex3, uv + vec2(x, y) * dirq * px * 1.5).rgb;
+            c = c / (1.0 + c); // compress highlights so they don't dominate
+            m += c; m2 += c * c; n += 1.0;
+        }
+        m /= n;
+        vec3 v = m2 / n - m * m;
+        float var = v.r + v.g + v.b;
+        if (var < bestVar) { bestVar = var; bestMean = m; }
+    }
+    return bestMean / max(1.0 - bestMean, 1e-3);
+}
+
 // ---------------------------------------------------------------- depth of field
 float viewDistAt(vec2 uv) {
     DepthSample d = sampleDepth(uv, true);
@@ -231,6 +255,10 @@ void main() {
     } else {
         color = texture(colortex3, uv).rgb;
     }
+    if (PAINTERLY > 0.0) {
+        DepthSample pd = sampleDepth(uv, true);
+        if (pd.isDH || pd.depth >= 0.56) color = painterly(uv, PAINTERLY);
+    }
     bool dofApplied;
     vec3 dof = depthOfField(uv, dofApplied);
     if (dofApplied) color = dof;
@@ -265,12 +293,24 @@ void main() {
     float vig = dot(fromCenter * vec2(viewWidth / viewHeight, 1.0) * 0.8, fromCenter * vec2(viewWidth / viewHeight, 1.0) * 0.8);
     color *= mix(1.0, smoothstep(1.0, 0.0, vig), VIGNETTE);
 
+#ifdef KUROSAWA_MODE
+    // black & white samurai film: hard contrast, strong grain, deep vignette
+    {
+        float k = luminance(color);
+        k = smoothstep(0.02, 0.85, k);
+        color = vec3(k);
+    }
+#endif
     color = linearToSrgb(color);
 
     // film grain (luminance weighted, strongest in the mid tones)
     float grain = hash12(gl_FragCoord.xy + fract(frameTimeCounter * 7.13) * 1000.0) - 0.5;
     float lum = luminance(color);
+#ifdef KUROSAWA_MODE
+    color += grain * 0.14 * (1.0 - abs(lum - 0.5) * 1.2);
+#else
     color += grain * FILM_GRAIN * 0.08 * (1.0 - abs(lum - 0.5) * 1.4);
+#endif
 
     // dithering against banding
     color += (hash12(gl_FragCoord.xy + 0.37) - 0.5) / 255.0;

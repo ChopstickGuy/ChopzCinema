@@ -19,7 +19,7 @@ const int noiseTextureResolution = 256;
 
 // ---------- Lighting ----------
 #define SUN_BRIGHTNESS 1.0 // [0.5 0.75 1.0 1.25 1.5 2.0]
-#define AMBIENT_BRIGHTNESS 0.75 // [0.4 0.5 0.6 0.75 1.0 1.25 1.5 2.0]
+#define AMBIENT_BRIGHTNESS 0.9 // [0.4 0.5 0.6 0.75 0.9 1.0 1.25 1.5 2.0]
 #define NIGHT_BRIGHTNESS 1.0 // [0.5 0.75 1.0 1.5 2.0 3.0]
 #define BLOCKLIGHT_BRIGHTNESS 1.0 // [0.5 0.75 1.0 1.25 1.5 2.0]
 #define BLOCKLIGHT_TEMP 2900 // [2200 2500 2900 3400 4000 5000]
@@ -52,7 +52,7 @@ const int noiseTextureResolution = 256;
 // ---------- Fog & volumetric light ----------
 #define VOLUMETRIC_LIGHT
 #define VL_SAMPLES 12 // [6 8 12 16 24]
-#define FOG_DENSITY 1.0 // [0.0 0.25 0.5 0.75 1.0 1.5 2.0 3.0]
+#define FOG_DENSITY 1.0 // [0.0 0.25 0.5 0.75 1.0 1.25 1.5 2.0 3.0]
 #define MORNING_MIST 1.0 // [0.0 0.5 1.0 1.5 2.0]
 #define VL_STRENGTH 1.0 // [0.25 0.5 0.75 1.0 1.5 2.0]
 #define CAVE_FOG
@@ -90,7 +90,7 @@ const int noiseTextureResolution = 256;
 // ---------- Waving ----------
 #define WAVING_PLANTS
 #define WAVING_LEAVES
-#define WAVING_STRENGTH 1.0 // [0.5 0.75 1.0 1.5 2.0]
+#define WAVING_STRENGTH 1.0 // [0.5 0.75 1.0 1.25 1.5 1.75 2.0 2.5]
 
 // ---------- Camera / Film ----------
 #define TAA
@@ -98,9 +98,9 @@ const int noiseTextureResolution = 256;
 #define AUTO_EXPOSURE
 #define EXPOSURE 0.0 // [-2.0 -1.5 -1.0 -0.5 0.0 0.5 1.0 1.5 2.0]
 #define BLOOM
-#define BLOOM_STRENGTH 1.0 // [0.0 0.25 0.5 0.75 1.0 1.5 2.0 3.0]
+#define BLOOM_STRENGTH 1.0 // [0.0 0.25 0.5 0.75 1.0 1.5 1.75 2.0 3.0]
 #define TONEMAP 1 // [0 1 2]
-#define COLOR_GRADE 4 // [0 1 2 3 4]
+#define COLOR_GRADE 4 // [0 1 2 3 4 5]
 #define GRADE_STRENGTH 1.0 // [0.0 0.25 0.5 0.75 1.0 1.25 1.5]
 #define CONTRAST 1.05 // [0.9 0.95 1.0 1.05 1.1 1.15 1.2]
 #define SATURATION 1.0 // [0.7 0.8 0.9 1.0 1.1 1.2 1.3]
@@ -112,6 +112,14 @@ const int noiseTextureResolution = 256;
 #define DOF_STRENGTH 0.5 // [0.0 0.25 0.5 0.75 1.0 1.5 2.0 3.0]
 const float centerDepthHalflife = 1.5;
 #define LETTERBOX 0 // [0 1 2]
+
+// ---------- Story look (Ghost of Tsushima inspired) ----------
+#define PAINTERLY 0.0 // [0.0 0.5 1.0 1.5 2.0]
+//#define FALLING_LEAVES
+#define LEAVES_DENSITY 1.0 // [0.5 1.0 1.5 2.0 3.0]
+#define WIND_GUSTS
+//#define GOLDEN_ATMOSPHERE
+//#define KUROSAWA_MODE
 
 // Iris only lists boolean options it sees in a plain #ifdef - reference all of them here.
 #ifdef COLORED_SHADOWS
@@ -171,4 +179,12 @@ const float centerDepthHalflife = 1.5;
 #ifdef LENS_FLARE
 #endif
 #ifdef DEPTH_OF_FIELD
+#endif
+#ifdef FALLING_LEAVES
+#endif
+#ifdef WIND_GUSTS
+#endif
+#ifdef GOLDEN_ATMOSPHERE
+#endif
+#ifdef KUROSAWA_MODE
 #endif

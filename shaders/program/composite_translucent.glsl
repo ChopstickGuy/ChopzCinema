@@ -91,7 +91,7 @@ void main() {
             vec3 trans = exp(-waterAbsorption() * dist);
             vec3 scatterLight = skyAmbient * 0.8 + lightColor * 0.25 * max(lightDir.y, 0.0);
             scatterLight *= surfaceSkyLm * surfaceSkyLm;
-            color = color * trans + waterScatterColor() * scatterLight * (1.0 - trans) * 4.0;
+            color = color * trans + waterScatterColor() * scatterLight * (1.0 - trans) * 1.6;
         }
 
         // ---- translucent surface colour (glass tint, optional water texture)

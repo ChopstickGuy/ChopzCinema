@@ -74,9 +74,16 @@ vec3 hsv2rgb(vec3 c) {
 // Print film style curve on display-referred linear values:
 // crushed, inky toe ("shadows are not grey, they're black") and a firm S in the mids.
 vec3 printCurve(vec3 c) {
+    // nights keep a little more detail in the shadows
+#ifdef DIM_OVERWORLD
+    float night = smoothstep(0.0, -0.2, sunDirWorld().y);
+#else
+    float night = 0.0;
+#endif
+    float crush = mix(0.018, 0.006, night);
     vec3 p = pow(max(c, 0.0), vec3(1.0 / 2.2));
-    p = max(p - 0.025, 0.0) / (1.0 - 0.025);        // black crush
-    p = mix(p, p * p * (3.0 - 2.0 * p), 0.4);        // S-curve
+    p = max(p - crush, 0.0) / (1.0 - crush);         // black crush
+    p = mix(p, p * p * (3.0 - 2.0 * p), 0.32);       // S-curve
     return pow(p, vec3(2.2));
 }
 
@@ -106,7 +113,7 @@ vec3 colorGrade(vec3 c) {
     float red = max(smoothstep(0.09, 0.0, h), smoothstep(0.92, 1.0, h));
     float blue = exp(-sq((h - 0.61) / 0.07));
     float green = exp(-sq((h - 0.28) / 0.10));
-    hsv.y *= 1.0 + 0.35 * red + 0.3 * blue - 0.32 * green;
+    hsv.y *= 1.0 + 0.35 * red + 0.3 * blue - 0.18 * green;
     hsv.x += green * 0.015;                 // foliage drifts a touch towards teal like print film
     hsv.y = saturate(hsv.y);
     graded = hsv2rgb(hsv);
@@ -115,8 +122,34 @@ vec3 colorGrade(vec3 c) {
     float hi = smoothstep(0.4, 0.9, lum4);
     graded *= mix(vec3(1.0), vec3(0.9, 1.0, 1.1), sh * 0.7);
     graded *= mix(vec3(1.0), vec3(1.07, 1.0, 0.9), hi * 0.7);
+#elif COLOR_GRADE == 5
+    // "Tsushima": painterly, lush and warm - saturated nature, golden light,
+    // soft violet-blue shadows that never go fully black
+    vec3 hsv5 = rgb2hsv(graded);
+    float h5 = hsv5.x;
+    float green5 = exp(-sq((h5 - 0.28) / 0.10));
+    float red5 = max(smoothstep(0.09, 0.0, h5), smoothstep(0.92, 1.0, h5));
+    float yellow5 = exp(-sq((h5 - 0.13) / 0.06));
+    hsv5.x -= green5 * 0.025;                    // greens lean towards golden yellow-green
+    hsv5.y = saturate(hsv5.y * (1.4 + 0.35 * red5 + 0.2 * yellow5));
+    graded = hsv2rgb(hsv5);
+    float lum5 = luminance(graded);
+    graded = graded * 0.95 + vec3(0.032, 0.026, 0.055) * (1.0 - smoothstep(0.0, 0.35, lum5));
+    graded *= mix(vec3(1.0), vec3(1.12, 1.02, 0.82), smoothstep(0.3, 0.9, lum5) * 0.8);
+    vec3 p5 = pow(max(graded, 0.0), vec3(1.0 / 2.2));
+    p5 = mix(p5, p5 * p5 * (3.0 - 2.0 * p5), 0.18);
+    graded = pow(p5, vec3(2.2));
 #endif
     graded = mix(c, graded, GRADE_STRENGTH);
+
+    // golden hour: warm the whole frame a little while the sun is low
+#ifdef DIM_OVERWORLD
+    {
+        float sy = sunDirWorld().y;
+        float golden = smoothstep(0.35, 0.04, sy) * smoothstep(-0.08, 0.02, sy) * (1.0 - rainStrength);
+        graded *= mix(vec3(1.0), vec3(1.1, 1.0, 0.84), golden * 0.7);
+    }
+#endif
 
     // rain: cooler, more desaturated, a bit more contrast - like a rainy scene in a film
     float rainMood = rainStrength * RAIN_MOOD;

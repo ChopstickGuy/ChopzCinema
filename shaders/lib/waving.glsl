@@ -24,6 +24,13 @@ vec3 windOffset(vec3 worldPos, float strength) {
     o.x = sin(t * 1.6 + worldPos.x * 0.7 + worldPos.y * 0.3) * 0.6 + sin(t * 2.7 + worldPos.z * 0.9) * 0.4;
     o.z = sin(t * 1.3 + worldPos.z * 0.6 + worldPos.x * 0.4) * 0.6 + sin(t * 2.3 + worldPos.x * 1.1) * 0.4;
     o.y = sin(t * 2.0 + worldPos.x + worldPos.z) * 0.15;
+#ifdef WIND_GUSTS
+    // visible gusts: a wave front that rolls across the landscape and bends everything one way
+    float front = sin(dot(worldPos.xz, vec2(0.085, 0.045)) - t * 1.4);
+    float g2 = smoothstep(0.35, 1.0, front);
+    o *= 1.0 + g2 * 1.6;
+    o.xz += vec2(0.9, 0.5) * g2 * 0.9;
+#endif
     return o * strength * gust * (0.06 + rainStrength * 0.05) * WAVING_STRENGTH;
 }
 

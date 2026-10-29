@@ -42,7 +42,7 @@ vec3 waterAbsorption() {
     return vec3(0.42, 0.11, 0.075) / WATER_CLARITY;
 }
 vec3 waterScatterColor() {
-    return vec3(0.012, 0.06, 0.07);
+    return vec3(0.008, 0.036, 0.06);
 }
 
 // Distance to the nearest cell border of an animated Voronoi pattern (0 on the border).

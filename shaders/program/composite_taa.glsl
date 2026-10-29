@@ -82,7 +82,7 @@ float computeExposure() {
     lum = exp2(lum / wsum);
     // partial adaptation: dark scenes stay darker than bright ones (nights look like nights)
     float target = 0.2 / pow(max(lum, 1e-5), 0.8);
-    target = clamp(target, 0.2, 3.5);
+    target = clamp(target, 0.2, 5.0);
     if (prev <= 0.0 || isnan(prev)) return target;
     // adapt faster to bright light than to darkness (like an eye)
     float speed = target < prev ? 2.2 : 1.0;

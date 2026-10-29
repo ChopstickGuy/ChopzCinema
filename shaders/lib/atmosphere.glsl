@@ -115,7 +115,7 @@ vec3 getSunlight(vec3 sunDir) {
 }
 vec3 getMoonlight(vec3 sunDir) {
     vec3 moonDir = -sunDir;
-    vec3 c = vec3(0.55, 0.7, 1.0) * MOON_ILLUM * 2.0 * NIGHT_BRIGHTNESS;
+    vec3 c = vec3(0.55, 0.7, 1.0) * MOON_ILLUM * 3.5 * NIGHT_BRIGHTNESS;
     c *= smoothstep(-0.03, 0.1, moonDir.y);
     return c * (1.0 - 0.75 * rainStrength);
 }
@@ -155,7 +155,7 @@ vec3 getSkyAmbient(vec3 sunDir) {
     a += skyRadianceCheap(h, sunDir) * 0.25;
     a += skyRadianceCheap(normalize(vec3(-h.x, h.y, -h.z)), sunDir) * 0.25;
     // the night sky is drawn dark so the stars pop - keep the landscape readable with soft moon fill
-    a += vec3(0.0035, 0.005, 0.011) * NIGHT_BRIGHTNESS * smoothstep(0.0, -0.2, sunDir.y);
+    a += vec3(0.008, 0.011, 0.021) * NIGHT_BRIGHTNESS * smoothstep(0.0, -0.2, sunDir.y);
     return a * AMBIENT_BRIGHTNESS;
 }
 
@@ -175,7 +175,9 @@ vec3 sunDisk(vec3 rd, vec3 sunDir) {
     float x = saturate(ang / r);
     float limb = 0.55 + 0.45 * sqrt(max(1.0 - x * x, 0.0));
     // soft corona hugging the disk
-    float corona = exp(-max(ang - r, 0.0) / (r * 0.9)) * 0.04 + exp(-ang / 0.12) * 0.004;
+    float lowSun = smoothstep(0.45, 0.02, sunDir.y);
+    float corona = exp(-max(ang - r, 0.0) / (r * 0.9)) * 0.04 + exp(-ang / 0.12) * 0.004 * (1.0 + 4.0 * lowSun)
+                 + exp(-ang / 0.35) * 0.0015 * lowSun;
     vec3 tr = sunTransmittance(sunDir);
     float vis = (1.0 - rainStrength) * smoothstep(-0.02, 0.0, rd.y);
     return (disk * limb * 60.0 + corona * 10.0) * tr * SUN_BRIGHTNESS * vis;

@@ -9,6 +9,7 @@
 #include "/lib/depth.glsl"
 #include "/lib/fog.glsl"
 #include "/lib/water.glsl"
+#include "/lib/leaves.glsl"
 #include "/program/fullscreen_frag_header.glsl"
 
 uniform sampler2D colortex3;
@@ -86,7 +87,7 @@ void main() {
     if (isEyeInWater == 1) {
         vec3 T = exp(-waterAbsorption() * min(dist, 256.0));
         vec3 scatterLight = (skyAmbient * 0.8 + lightColor * 0.25 * max(lightDir.y, 0.0)) * max(eyeSkylight(), 0.15);
-        color = color * T + waterScatterColor() * scatterLight * (1.0 - T) * 4.0;
+        color = color * T + waterScatterColor() * scatterLight * (1.0 - T) * 5.0;
         color += upsampleVL(texcoord);
     } else if (isEyeInWater == 2) {
         float T = exp(-dist * 1.5);
@@ -114,6 +115,16 @@ void main() {
         // ambient light in the fog (sky colour), darker in caves
         float caveF = eyeSkylight();
         vec3 fogAmbient = skyAmbient * mix(0.04, 1.0, caveF);
+#ifdef GOLDEN_ATMOSPHERE
+        // painterly aerial perspective: warm golden haze by day, violet at dusk
+        {
+            float dayF = smoothstep(-0.05, 0.3, sunDir.y);
+            float duskF = smoothstep(0.35, 0.05, sunDir.y) * smoothstep(-0.12, 0.0, sunDir.y);
+            vec3 tint = mix(vec3(0.85, 0.75, 1.15), vec3(1.3, 1.05, 0.7), dayF);
+            tint = mix(tint, vec3(1.45, 0.85, 0.5), duskF);   // glowing orange dusk
+            fogAmbient = mix(fogAmbient, vec3(luminance(fogAmbient)) * tint, 0.6);
+        }
+#endif
         vec3 inscatter = fogAmbient * (1.0 - T);
 
         // sun light scattered in the fog beyond the ray-marched range is unshadowed
@@ -121,7 +132,8 @@ void main() {
         float vlLen = min(len, shadowDistance);
         float odNear = fogOpticalDepth(fp, camY, dir.y, vlLen);
         float farPart = exp(-odNear) - T;
-        inscatter += lightColor * fogPhase(mu) * farPart * VL_STRENGTH * caveF * 0.4;
+        float goldenHour = smoothstep(0.4, 0.03, sunDir.y) * smoothstep(-0.06, 0.03, sunDir.y);
+        inscatter += lightColor * fogPhase(mu) * farPart * VL_STRENGTH * caveF * 0.4 * (1.0 + 2.0 * goldenHour);
         inscatter += upsampleVL(texcoord);
 #else
         inscatter += lightColor * fogPhase(mu) * (1.0 - T) * 0.25 * caveF;
@@ -136,6 +148,13 @@ void main() {
             color = color * Tc + vec3(0.0025, 0.003, 0.004) * MIN_LIGHT * (1.0 - Tc);
         }
 #endif
+    }
+#endif
+
+#if defined FALLING_LEAVES && defined DIM_OVERWORLD
+    if (isEyeInWater == 0 && eyeSkylight() > 0.3) {
+        vec4 lv = fallingLeaves(cameraPosition + gbufferModelViewInverse[3].xyz, dir, ds.isSky ? 48.0 : dist, lightDir, lightColor, skyAmbient);
+        color = color * (1.0 - lv.a) + lv.rgb * smoothstep(0.3, 0.6, eyeSkylight());
     }
 #endif
 
