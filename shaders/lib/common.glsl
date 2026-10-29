@@ -23,6 +23,8 @@ uniform float far;
 uniform float frameTimeCounter;
 uniform int frameCounter;
 uniform int worldTime;
+uniform int worldDay;
+uniform float sunAngle;
 uniform float rainStrength;
 uniform float wetness;
 uniform ivec2 eyeBrightnessSmooth;
@@ -82,6 +84,13 @@ float ignAnimated(vec2 p) {
     p += 5.588238 * float(frameCounter % 64);
 #endif
     return ign(p);
+}
+
+float hashInt(int n) {
+    uint x = uint(n) * 747796405u + 2891336453u;
+    x = ((x >> ((x >> 28u) + 4u)) ^ x) * 277803737u;
+    x = (x >> 22u) ^ x;
+    return float(x) / 4294967295.0;
 }
 
 float hash12(vec2 p) {

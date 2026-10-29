@@ -1,4 +1,4 @@
-// Silverscreen - user settings
+// ChopzCinema - user settings
 // Every option here shows up in the in-game shader settings menu.
 
 // ---------- Shadows ----------
@@ -29,7 +29,14 @@ const int noiseTextureResolution = 256;
 
 // ---------- Sky & Atmosphere ----------
 #define STARS
-#define STAR_AMOUNT 1.0 // [0.5 1.0 1.5 2.0]
+#define STAR_AMOUNT 1.0 // [0.5 0.75 1.0 1.5 2.0 3.0]
+#define STAR_BRIGHTNESS 1.0 // [0.5 0.75 1.0 1.5 2.0 3.0]
+#define MILKY_WAY
+#define MILKY_WAY_BRIGHTNESS 1.0 // [0.25 0.5 0.75 1.0 1.5 2.0]
+#define SHOOTING_STARS
+#define AURORA 1 // [0 1 2]
+#define AURORA_CHANCE 0.3 // [0.1 0.2 0.3 0.5 0.75 1.0]
+#define AURORA_BRIGHTNESS 1.0 // [0.5 0.75 1.0 1.5 2.0 3.0]
 
 // ---------- Volumetric clouds ----------
 #define VOLUMETRIC_CLOUDS

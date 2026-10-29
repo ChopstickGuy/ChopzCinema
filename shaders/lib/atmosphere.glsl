@@ -136,9 +136,9 @@ vec3 skyRadianceQ(vec3 rd, vec3 sunDir, const int steps, const int lightSteps) {
     d.y = max(d.y, 0.002);
     d = normalize(d);
     vec3 sky = atmoScatter(d, sunDir, steps, lightSteps) * SKY_GAIN * SUN_BRIGHTNESS;
-    vec3 night = atmoScatter(d, -sunDir, steps / 2, 2) * SKY_GAIN * MOON_ILLUM * 0.8 * NIGHT_BRIGHTNESS;
+    vec3 night = atmoScatter(d, -sunDir, steps / 2, 2) * SKY_GAIN * MOON_ILLUM * 0.22 * NIGHT_BRIGHTNESS;
     // a touch of blue airglow so nights never go completely flat
-    night += vec3(0.0015, 0.0028, 0.006) * NIGHT_BRIGHTNESS;
+    night += vec3(0.0005, 0.0008, 0.0018) * NIGHT_BRIGHTNESS;
     sky += night;
     sky = rainSky(sky, sunDir);
     return sky * mix(1.0, 0.45, below);
@@ -152,6 +152,8 @@ vec3 getSkyAmbient(vec3 sunDir) {
     vec3 h = normalize(vec3(sunDir.x, 0.0, sunDir.z) + vec3(0.0, 0.35, 0.0));
     a += skyRadianceCheap(h, sunDir) * 0.25;
     a += skyRadianceCheap(normalize(vec3(-h.x, h.y, -h.z)), sunDir) * 0.25;
+    // the night sky is drawn dark so the stars pop - keep the landscape readable with soft moon fill
+    a += vec3(0.0035, 0.005, 0.011) * NIGHT_BRIGHTNESS * smoothstep(0.0, -0.2, sunDir.y);
     return a * AMBIENT_BRIGHTNESS;
 }
 
@@ -162,26 +164,7 @@ vec3 sunDisk(vec3 rd, vec3 sunDir) {
     return disk * tr * 120.0 * SUN_BRIGHTNESS * (1.0 - rainStrength) * step(-0.01, rd.y);
 }
 
-// Procedural stars (rendered behind everything at night)
-vec3 stars(vec3 rd, vec3 sunDir) {
-#ifdef STARS
-    float night = smoothstep(0.05, -0.2, sunDir.y) * (1.0 - rainStrength);
-    if (night <= 0.0 || rd.y < 0.0) return vec3(0.0);
-    // rotate with the sky
-    vec3 p = rd * 300.0;
-    vec3 cell = floor(p);
-    vec3 f = fract(p) - 0.5;
-    float h = fract(sin(dot(cell, vec3(127.1, 311.7, 74.7))) * 43758.5453);
-    float threshold = 1.0 - 0.0025 * STAR_AMOUNT;
-    if (h < threshold) return vec3(0.0);
-    float s = smoothstep(0.35, 0.0, length(f));
-    float twinkle = 0.7 + 0.3 * sin(frameTimeCounter * 3.0 + h * 1000.0);
-    vec3 col = mix(vec3(0.7, 0.8, 1.0), vec3(1.0, 0.85, 0.7), fract(h * 37.0));
-    return col * s * twinkle * night * 0.6 * smoothstep(0.0, 0.2, rd.y);
-#else
-    return vec3(0.0);
-#endif
-}
+#include "/lib/nightsky.glsl"
 
 // Per-frame light colours for the current dimension
 void getFrameLighting(vec3 sunDir, out vec3 lightCol, out vec3 ambient) {
@@ -194,5 +177,7 @@ void getFrameLighting(vec3 sunDir, out vec3 lightCol, out vec3 ambient) {
 #else
     lightCol = getShadowLightColor(sunDir);
     ambient = getSkyAmbient(sunDir);
+    // faint green glow on the landscape when the northern lights are out
+    ambient += vec3(0.1, 1.0, 0.45) * auroraActivity() * 0.004;
 #endif
 }

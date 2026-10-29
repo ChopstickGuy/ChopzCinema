@@ -1,4 +1,4 @@
-# Silverscreen Shaders (v0.1, Entwicklungsversion)
+# ChopzCinema Shaders (v0.2, Entwicklungsversion)
 
 Ein cineastischer Shader für **Minecraft 1.20.1** mit **Oculus/Iris** und Unterstützung für **Distant Horizons**.
 Ziel: Film-Look (Teal & Orange, weiches Licht, starke Licht-/Schattenkontraste), volumetrische Wolken, Nebel und Lichtstrahlen. Die Reflexionen sollen schön sein, ohne zu übertreiben.
@@ -8,14 +8,15 @@ Ziel: Film-Look (Teal & Orange, weiches Licht, starke Licht-/Schattenkontraste),
 - optional **Distant Horizons 2.2+ / 3.x**
 
 ## Installation
-1. `Silverscreen-v0.1.zip` in den Ordner `.minecraft/shaderpacks/` legen (nicht entpacken).
-2. Im Spiel: Optionen → Grafik → Shader-Pakete → **Silverscreen** auswählen.
+1. `ChopzCinema-v0.1.zip` in den Ordner `.minecraft/shaderpacks/` legen (nicht entpacken).
+2. Im Spiel: Optionen → Grafik → Shader-Pakete → **ChopzCinema** auswählen.
 3. Profil im Shader-Menü wählen (LOW / MEDIUM / HIGH / ULTRA). Standard ist HIGH.
 
 ## Features
 | Bereich | Inhalt |
 |---|---|
-| Himmel | physikalischer Himmel (Rayleigh, Mie, Ozon), echte Sonnenuntergänge, Sterne, „Day-for-Night“-Nächte |
+| Himmel | physikalischer Himmel (Rayleigh, Mie, Ozon), echte Sonnenuntergänge, „Day-for-Night“-Nächte |
+| Nachthimmel | dunkler Sternenhimmel mit 3 Sternebenen (Farbtemperaturen, Funkeln), Milchstraße mit Staubbändern, Sternschnuppen, Polarlichter in manchen Nächten (auch im Wasser gespiegelt), Sterne drehen sich mit dem Himmel |
 | Wolken | volumetrische Cumulus-Wolken (halbe Auflösung), Silberränder, Regen macht sie dichter |
 | Nebel | Höhennebel und Dunst, Morgen-/Abendnebel, Lichtstrahlen (God Rays) mit echten Schatten, Unterwasser-Lichtstrahlen |
 | Licht | weiche Schatten (Vogel-PCF), farbige Schatten durch Glas, durchscheinende Blätter, warmes Fackellicht (Kelvin einstellbar) |
@@ -48,5 +49,5 @@ tools_gen_wrappers.py  erzeugt die Wrapper neu (nach Änderungen an der Programm
 10. `final`: Bloom, Lens Flare, Filmkurve, Grading, Vignette, Korn
 
 ## Status
-Version 0.1: Alle Programme kompilieren in allen Dimensionen fehlerfrei mit einem echten OpenGL-Compiler.
+Version 0.2: Alle Programme kompilieren in allen Dimensionen fehlerfrei mit einem echten OpenGL-Compiler.
 **Im Spiel ist sie noch ungetestet.** Bitte bei Problemen Screenshots und `.minecraft/logs/latest.log` schicken.
